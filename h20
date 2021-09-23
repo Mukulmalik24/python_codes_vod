@@ -1,0 +1,1752 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### https://learning.oreilly.com/library/view/practical-machine-learning/9781491964590/ch01.html"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "^C\n"
+     ]
+    }
+   ],
+   "source": [
+    "!pip install -U h2o"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import h2o"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Checking whether there is an H2O instance running at http://localhost:54321 ..... not found.\n",
+      "Attempting to start a local H2O server...\n",
+      "; Java HotSpot(TM) 64-Bit Server VM (build 25.251-b08, mixed mode)\n",
+      "  Starting server from C:\\ProgramData\\Anaconda3\\lib\\site-packages\\h2o\\backend\\bin\\h2o.jar\n",
+      "  Ice root: C:\\Users\\MalikM\\AppData\\Local\\Temp\\tmpa697k5kv\n",
+      "  JVM stdout: C:\\Users\\MalikM\\AppData\\Local\\Temp\\tmpa697k5kv\\h2o_MalikM_started_from_python.out\n",
+      "  JVM stderr: C:\\Users\\MalikM\\AppData\\Local\\Temp\\tmpa697k5kv\\h2o_MalikM_started_from_python.err\n",
+      "  Server is running at http://127.0.0.1:54321\n",
+      "Connecting to H2O server at http://127.0.0.1:54321 ... successful.\n"
+     ]
+    },
+    {
+     "data": {
+      "text/html": [
+       "<div style=\"overflow:auto\"><table style=\"width:50%\"><tr><td>H2O_cluster_uptime:</td>\n",
+       "<td>11 secs</td></tr>\n",
+       "<tr><td>H2O_cluster_timezone:</td>\n",
+       "<td>Asia/Kolkata</td></tr>\n",
+       "<tr><td>H2O_data_parsing_timezone:</td>\n",
+       "<td>UTC</td></tr>\n",
+       "<tr><td>H2O_cluster_version:</td>\n",
+       "<td>3.32.1.1</td></tr>\n",
+       "<tr><td>H2O_cluster_version_age:</td>\n",
+       "<td>23 days </td></tr>\n",
+       "<tr><td>H2O_cluster_name:</td>\n",
+       "<td>H2O_from_python_MalikM_f9yx6y</td></tr>\n",
+       "<tr><td>H2O_cluster_total_nodes:</td>\n",
+       "<td>1</td></tr>\n",
+       "<tr><td>H2O_cluster_free_memory:</td>\n",
+       "<td>1.750 Gb</td></tr>\n",
+       "<tr><td>H2O_cluster_total_cores:</td>\n",
+       "<td>4</td></tr>\n",
+       "<tr><td>H2O_cluster_allowed_cores:</td>\n",
+       "<td>4</td></tr>\n",
+       "<tr><td>H2O_cluster_status:</td>\n",
+       "<td>locked, healthy</td></tr>\n",
+       "<tr><td>H2O_connection_url:</td>\n",
+       "<td>http://127.0.0.1:54321</td></tr>\n",
+       "<tr><td>H2O_connection_proxy:</td>\n",
+       "<td>{\"http\": null, \"https\": null}</td></tr>\n",
+       "<tr><td>H2O_internal_security:</td>\n",
+       "<td>False</td></tr>\n",
+       "<tr><td>H2O_API_Extensions:</td>\n",
+       "<td>Amazon S3, Algos, AutoML, Core V3, TargetEncoder, Core V4</td></tr>\n",
+       "<tr><td>Python_version:</td>\n",
+       "<td>3.6.5 final</td></tr></table></div>"
+      ],
+      "text/plain": [
+       "--------------------------  ---------------------------------------------------------\n",
+       "H2O_cluster_uptime:         11 secs\n",
+       "H2O_cluster_timezone:       Asia/Kolkata\n",
+       "H2O_data_parsing_timezone:  UTC\n",
+       "H2O_cluster_version:        3.32.1.1\n",
+       "H2O_cluster_version_age:    23 days\n",
+       "H2O_cluster_name:           H2O_from_python_MalikM_f9yx6y\n",
+       "H2O_cluster_total_nodes:    1\n",
+       "H2O_cluster_free_memory:    1.750 Gb\n",
+       "H2O_cluster_total_cores:    4\n",
+       "H2O_cluster_allowed_cores:  4\n",
+       "H2O_cluster_status:         locked, healthy\n",
+       "H2O_connection_url:         http://127.0.0.1:54321\n",
+       "H2O_connection_proxy:       {\"http\": null, \"https\": null}\n",
+       "H2O_internal_security:      False\n",
+       "H2O_API_Extensions:         Amazon S3, Algos, AutoML, Core V3, TargetEncoder, Core V4\n",
+       "Python_version:             3.6.5 final\n",
+       "--------------------------  ---------------------------------------------------------"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "h2o.init()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "###### By default, your H2O instance will be allowed to use all your cores, and (typically) 25% of your system memory. That is often fine but, for the sake of argument, what if you wanted to give it exactly 4GB of your memory, but only two of your eight cores?"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "######  First shut down H2O with "
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "h2o.shutdown()\n",
+    "then type h2o.init(nthreads=2, max_mem_size=4). "
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### EXample"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Parse progress: |█████████████████████████████████████████████████████████| 100%\n"
+     ]
+    }
+   ],
+   "source": [
+    "datasets = \"https://raw.githubusercontent.com/DarrenCook/h2o/bk/datasets/\"\n",
+    "data = h2o.import_file(datasets + \"iris_wheader.csv\")  #1"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "###### illustrates the first major concept we need to understand when using H2O: all the data is on the cluster (the server), not on our client. Even when client and cluster are the same machine."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "y = \"class\"  #2\n",
+    "x = data.names\n",
+    "x.remove(y)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "train, test = data.split_frame([0.8])  #3"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "deeplearning Model Build progress: |██████████████████████████████████████| 100%\n",
+      "deeplearning prediction progress: |███████████████████████████████████████| 100%\n"
+     ]
+    }
+   ],
+   "source": [
+    "m = h2o.estimators.deeplearning.H2ODeepLearningEstimator()  #4\n",
+    "m.train(x, y, train)\n",
+    "p = m.predict(test)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<table>\n",
+       "<thead>\n",
+       "<tr><th>predict        </th><th style=\"text-align: right;\">  Iris-setosa</th><th style=\"text-align: right;\">  Iris-versicolor</th><th style=\"text-align: right;\">  Iris-virginica</th></tr>\n",
+       "</thead>\n",
+       "<tbody>\n",
+       "<tr><td>Iris-setosa    </td><td style=\"text-align: right;\">  0.999947   </td><td style=\"text-align: right;\">      5.34913e-05</td><td style=\"text-align: right;\">     2.1288e-23 </td></tr>\n",
+       "<tr><td>Iris-setosa    </td><td style=\"text-align: right;\">  0.999991   </td><td style=\"text-align: right;\">      9.31179e-06</td><td style=\"text-align: right;\">     4.31686e-24</td></tr>\n",
+       "<tr><td>Iris-setosa    </td><td style=\"text-align: right;\">  0.999993   </td><td style=\"text-align: right;\">      6.7845e-06 </td><td style=\"text-align: right;\">     2.58773e-23</td></tr>\n",
+       "<tr><td>Iris-setosa    </td><td style=\"text-align: right;\">  0.999949   </td><td style=\"text-align: right;\">      5.09344e-05</td><td style=\"text-align: right;\">     2.85608e-22</td></tr>\n",
+       "<tr><td>Iris-setosa    </td><td style=\"text-align: right;\">  1          </td><td style=\"text-align: right;\">      4.19962e-07</td><td style=\"text-align: right;\">     1.63467e-25</td></tr>\n",
+       "<tr><td>Iris-setosa    </td><td style=\"text-align: right;\">  0.999924   </td><td style=\"text-align: right;\">      7.60495e-05</td><td style=\"text-align: right;\">     8.08773e-24</td></tr>\n",
+       "<tr><td>Iris-setosa    </td><td style=\"text-align: right;\">  0.999992   </td><td style=\"text-align: right;\">      8.281e-06  </td><td style=\"text-align: right;\">     4.355e-24  </td></tr>\n",
+       "<tr><td>Iris-setosa    </td><td style=\"text-align: right;\">  0.999943   </td><td style=\"text-align: right;\">      5.684e-05  </td><td style=\"text-align: right;\">     4.40334e-21</td></tr>\n",
+       "<tr><td>Iris-setosa    </td><td style=\"text-align: right;\">  0.999805   </td><td style=\"text-align: right;\">      0.000195245</td><td style=\"text-align: right;\">     1.80559e-22</td></tr>\n",
+       "<tr><td>Iris-versicolor</td><td style=\"text-align: right;\">  2.2396e-06 </td><td style=\"text-align: right;\">      0.99603    </td><td style=\"text-align: right;\">     0.00396817 </td></tr>\n",
+       "<tr><td>Iris-versicolor</td><td style=\"text-align: right;\">  0.000183317</td><td style=\"text-align: right;\">      0.999807   </td><td style=\"text-align: right;\">     9.42052e-06</td></tr>\n",
+       "<tr><td>Iris-versicolor</td><td style=\"text-align: right;\">  0.000294408</td><td style=\"text-align: right;\">      0.999657   </td><td style=\"text-align: right;\">     4.84347e-05</td></tr>\n",
+       "<tr><td>Iris-versicolor</td><td style=\"text-align: right;\">  0.000740545</td><td style=\"text-align: right;\">      0.999084   </td><td style=\"text-align: right;\">     0.000175427</td></tr>\n",
+       "<tr><td>Iris-versicolor</td><td style=\"text-align: right;\">  2.18283e-05</td><td style=\"text-align: right;\">      0.999973   </td><td style=\"text-align: right;\">     5.29989e-06</td></tr>\n",
+       "<tr><td>Iris-versicolor</td><td style=\"text-align: right;\">  1.20862e-05</td><td style=\"text-align: right;\">      0.999939   </td><td style=\"text-align: right;\">     4.89028e-05</td></tr>\n",
+       "<tr><td>Iris-versicolor</td><td style=\"text-align: right;\">  2.14223e-06</td><td style=\"text-align: right;\">      0.943352   </td><td style=\"text-align: right;\">     0.0566454  </td></tr>\n",
+       "<tr><td>Iris-versicolor</td><td style=\"text-align: right;\">  0.0019424  </td><td style=\"text-align: right;\">      0.997911   </td><td style=\"text-align: right;\">     0.00014627 </td></tr>\n",
+       "<tr><td>Iris-versicolor</td><td style=\"text-align: right;\">  2.07914e-07</td><td style=\"text-align: right;\">      0.999978   </td><td style=\"text-align: right;\">     2.19029e-05</td></tr>\n",
+       "<tr><td>Iris-versicolor</td><td style=\"text-align: right;\">  8.23292e-05</td><td style=\"text-align: right;\">      0.999831   </td><td style=\"text-align: right;\">     8.67003e-05</td></tr>\n",
+       "<tr><td>Iris-versicolor</td><td style=\"text-align: right;\">  0.00280151 </td><td style=\"text-align: right;\">      0.997198   </td><td style=\"text-align: right;\">     1.77487e-10</td></tr>\n",
+       "</tbody>\n",
+       "</table>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "data": {
+      "text/plain": []
+     },
+     "execution_count": 12,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "p.head(20)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Getting Data into H2O\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "##### To use the H2O machine-learning algorithms the data must be in the H2O cluster; all that exists on your client is a handle (a pointer) to H2O’s data frame. This might frustrate you at times, but it is what allows you to deal with big data sets that won’t fit on any single machine in your cluster, let alone on the pokey little notebook you are running the client on."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Uploading a csv"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Here are some of the possible upload paths you can use:\n",
+    "\n",
+    "# df = h2o.import_file(\"hdfs://namenode/user/path/to/my.csv\")\n",
+    "# df = h2o.import_file(\"s3://<AWS_ACCESS_KEY>:<AWS_SECRET_KEY>@mybucket/my.csv\")\n",
+    "# df = h2o.import_file(\"https://s3.amazonaws.com/mybucket/my.csv\")\n",
+    "# df = h2o.import_file(\"/path/to/my.csv\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#### You can specify a list of file paths, as follows:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 18,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#df = h2o.import_file([\"/path/to/my1.csv\", \"/path/to/my2.csv\"])\n",
+    "# this will append all these files row-wise, one below the other"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### if the file is on your local machine (which is different to the machine your cluster is on)?\n",
+    "Then you have two choices:"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "##### 1) [If the data is big - use this way]\n",
+    "Put the file directly on the cluster machine, or on a web server, S3, a Hadoop cluster, etc., and continue to use h2o.import_file()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "##### 2) {if this one time activity- use this way]\n",
+    "h2o.upload_file() instead of h2o.import_file()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Python example takes a csv file that has no header row, and shows how to explicitly specify the column names and the column types:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "datasets = \"https://raw.githubusercontent.com/DarrenCook/h2o/bk/datasets/\"\n",
+    "data = h2o.import_file(datasets + \"iris.csv\",\n",
+    "  col_names=[\n",
+    "    \"Sepal length\", \"Sepal width\",\"Petal length\", \"Petal width\", \"Species\"\n",
+    "    ],\n",
+    "  col_types=[\n",
+    "    \"numeric\", \"numeric\", \"numeric\", \"numeric\", \"enum\"\n",
+    "    ]\n",
+    "  )"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Load directly from python"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "##### You’ve got a table of data in your Python script and want to push it to H2O, to generate a model, or bind with other data there. \n",
+    " 1st solution is to save it to a csv file, then use h2o.upload_file() (or h2o.import_file() if the file is somewhere visible to all the nodes in your cluster).\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 20,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Parse progress: |█████████████████████████████████████████████████████████| 100%\n"
+     ]
+    }
+   ],
+   "source": [
+    "#2nd way is to use h2o.H2OFrame() or (h2o.H2OFrame.from_python() - with more otions) For instance, if your data is in a Python dictionary:\n",
+    "patients = {\n",
+    "    'name':['aa','bb', 'cc'],\n",
+    "    'age' : [10,20,30],\n",
+    "    'risk' :['a','b','c']\n",
+    "}\n",
+    "h2o_df= h2o.H2OFrame(patients)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 25,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "{'name': 'string', 'age': 'int', 'risk': 'string'}"
+      ]
+     },
+     "execution_count": 25,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "h2o_df.types\n",
+    "#h2o_df.head() # works\n",
+    "# h2o_df.describe() # works"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 27,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Parse progress: |█████████████████████████████████████████████████████████| 100%\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "{'height': 'enum', 'age': 'int', 'risk': 'enum'}"
+      ]
+     },
+     "execution_count": 27,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "patients = {\n",
+    "  'height':[188, 157, 175.1],\n",
+    "  'age':[29, 33, 65],\n",
+    "  'risk':['A', 'B', 'B']\n",
+    "  }\n",
+    "df = h2o.H2OFrame.from_python(\n",
+    "  patients,\n",
+    "  column_types=['enum', None, None],\n",
+    "  destination_frame=\"patients\"\n",
+    "  )\n",
+    "df.types # it takes what dtypes we have give them and assign itself otherwise\n",
+    "#df.frame_id"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 28,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "'patients'"
+      ]
+     },
+     "execution_count": 28,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df.frame_id"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### When you import or upload a file, the frame is given some unique name. For example“iris.hex_sid_9739_3”. \n",
+    "If you’d like to have it use meaningful names, then specify destination_frame"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### From pandas df to H2o df"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 30,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Parse progress: |█████████████████████████████████████████████████████████| 100%\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "{'height': 'real', 'age': 'int', 'risk': 'enum'}"
+      ]
+     },
+     "execution_count": 30,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "import pandas as pd\n",
+    "patients = pd.DataFrame({\n",
+    "  'height':[188, 157, 175.1],\n",
+    "  'age':[29, 33, 65],\n",
+    "  'risk':['A', 'B', 'B']\n",
+    "  })\n",
+    "df = h2o.H2OFrame(patients)\n",
+    "df.types\n",
+    "\n",
+    "#or\n",
+    "\n",
+    "# patients = pd.DataFrame({\n",
+    "#   'height':[188, 157, 175.1],\n",
+    "#   'age':[29, 33, 65],\n",
+    "#   'risk':['A', 'B', 'B']\n",
+    "#   })\n",
+    "# df = h2o.H2OFrame.from_python(\n",
+    "#   patients,\n",
+    "#   column_names=patients.columns.tolist()\n",
+    "#   )\n",
+    "# df.types\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 31,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "'Key_Frame__upload_a360ec89feb9f3c9a58ce65798e14b3e.hex'"
+      ]
+     },
+     "execution_count": 31,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df.frame_id"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 33,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<table>\n",
+       "<thead>\n",
+       "<tr><th style=\"text-align: right;\">  height</th><th style=\"text-align: right;\">  age</th><th>risk  </th></tr>\n",
+       "</thead>\n",
+       "<tbody>\n",
+       "<tr><td style=\"text-align: right;\">   188  </td><td style=\"text-align: right;\">   29</td><td>A     </td></tr>\n",
+       "<tr><td style=\"text-align: right;\">   157  </td><td style=\"text-align: right;\">   33</td><td>B     </td></tr>\n",
+       "<tr><td style=\"text-align: right;\">   175.1</td><td style=\"text-align: right;\">   65</td><td>B     </td></tr>\n",
+       "</tbody>\n",
+       "</table>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "data": {
+      "text/plain": []
+     },
+     "execution_count": 33,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Data Manipulation"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Laziness, Naming, Deleting\n",
+    "There are two key concepts you need to know for successful H2O data manipulation:\n",
+    "\n",
+    "1) Every change you make involves a data copy. That means the frame name will change, too.\n",
+    "\n",
+    "2) A lot of operations are lazy, meaning the requested change is recorded, but is not carried out until it has to be."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### remove an H2O frame directly with h2o.remove() - give list for multiple frames"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 41,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Checking whether there is an H2O instance running at http://localhost:54321 . connected.\n"
+     ]
+    },
+    {
+     "data": {
+      "text/html": [
+       "<div style=\"overflow:auto\"><table style=\"width:50%\"><tr><td>H2O_cluster_uptime:</td>\n",
+       "<td>13 hours 51 mins</td></tr>\n",
+       "<tr><td>H2O_cluster_timezone:</td>\n",
+       "<td>Asia/Kolkata</td></tr>\n",
+       "<tr><td>H2O_data_parsing_timezone:</td>\n",
+       "<td>UTC</td></tr>\n",
+       "<tr><td>H2O_cluster_version:</td>\n",
+       "<td>3.32.1.1</td></tr>\n",
+       "<tr><td>H2O_cluster_version_age:</td>\n",
+       "<td>23 days </td></tr>\n",
+       "<tr><td>H2O_cluster_name:</td>\n",
+       "<td>H2O_from_python_MalikM_f9yx6y</td></tr>\n",
+       "<tr><td>H2O_cluster_total_nodes:</td>\n",
+       "<td>1</td></tr>\n",
+       "<tr><td>H2O_cluster_free_memory:</td>\n",
+       "<td>1.620 Gb</td></tr>\n",
+       "<tr><td>H2O_cluster_total_cores:</td>\n",
+       "<td>4</td></tr>\n",
+       "<tr><td>H2O_cluster_allowed_cores:</td>\n",
+       "<td>4</td></tr>\n",
+       "<tr><td>H2O_cluster_status:</td>\n",
+       "<td>locked, healthy</td></tr>\n",
+       "<tr><td>H2O_connection_url:</td>\n",
+       "<td>http://localhost:54321</td></tr>\n",
+       "<tr><td>H2O_connection_proxy:</td>\n",
+       "<td>{\"http\": null, \"https\": null}</td></tr>\n",
+       "<tr><td>H2O_internal_security:</td>\n",
+       "<td>False</td></tr>\n",
+       "<tr><td>H2O_API_Extensions:</td>\n",
+       "<td>Amazon S3, Algos, AutoML, Core V3, TargetEncoder, Core V4</td></tr>\n",
+       "<tr><td>Python_version:</td>\n",
+       "<td>3.6.5 final</td></tr></table></div>"
+      ],
+      "text/plain": [
+       "--------------------------  ---------------------------------------------------------\n",
+       "H2O_cluster_uptime:         13 hours 51 mins\n",
+       "H2O_cluster_timezone:       Asia/Kolkata\n",
+       "H2O_data_parsing_timezone:  UTC\n",
+       "H2O_cluster_version:        3.32.1.1\n",
+       "H2O_cluster_version_age:    23 days\n",
+       "H2O_cluster_name:           H2O_from_python_MalikM_f9yx6y\n",
+       "H2O_cluster_total_nodes:    1\n",
+       "H2O_cluster_free_memory:    1.620 Gb\n",
+       "H2O_cluster_total_cores:    4\n",
+       "H2O_cluster_allowed_cores:  4\n",
+       "H2O_cluster_status:         locked, healthy\n",
+       "H2O_connection_url:         http://localhost:54321\n",
+       "H2O_connection_proxy:       {\"http\": null, \"https\": null}\n",
+       "H2O_internal_security:      False\n",
+       "H2O_API_Extensions:         Amazon S3, Algos, AutoML, Core V3, TargetEncoder, Core V4\n",
+       "Python_version:             3.6.5 final\n",
+       "--------------------------  ---------------------------------------------------------"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>key</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>DeepLearning_model_python_1618688456156_1</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>Key_Frame__https___raw_githubusercontent_com_D...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>Key_Frame__https___raw_githubusercontent_com_D...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>Key_Frame__https___raw_githubusercontent_com_D...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>Key_Frame__upload_84f47aaa730f53f6888dc078ecb5...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>5</th>\n",
+       "      <td>Key_Frame__upload_8c5140076274adbfaddfbbe3ddd4...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>6</th>\n",
+       "      <td>Key_Frame__upload_a360ec89feb9f3c9a58ce65798e1...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>7</th>\n",
+       "      <td>_8d2e8907c91d31967a1fc92e428a4bac</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>8</th>\n",
+       "      <td>iris</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>9</th>\n",
+       "      <td>modelmetrics_DeepLearning_model_python_1618688...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>10</th>\n",
+       "      <td>patients</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>11</th>\n",
+       "      <td>py_2_sid_8f95</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>12</th>\n",
+       "      <td>py_3_sid_8f95</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>13</th>\n",
+       "      <td>py_4_sid_8f95</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>14</th>\n",
+       "      <td>transformation_8407_DeepLearning_model_python_...</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "                                                  key\n",
+       "0           DeepLearning_model_python_1618688456156_1\n",
+       "1   Key_Frame__https___raw_githubusercontent_com_D...\n",
+       "2   Key_Frame__https___raw_githubusercontent_com_D...\n",
+       "3   Key_Frame__https___raw_githubusercontent_com_D...\n",
+       "4   Key_Frame__upload_84f47aaa730f53f6888dc078ecb5...\n",
+       "5   Key_Frame__upload_8c5140076274adbfaddfbbe3ddd4...\n",
+       "6   Key_Frame__upload_a360ec89feb9f3c9a58ce65798e1...\n",
+       "7                   _8d2e8907c91d31967a1fc92e428a4bac\n",
+       "8                                                iris\n",
+       "9   modelmetrics_DeepLearning_model_python_1618688...\n",
+       "10                                           patients\n",
+       "11                                      py_2_sid_8f95\n",
+       "12                                      py_3_sid_8f95\n",
+       "13                                      py_4_sid_8f95\n",
+       "14  transformation_8407_DeepLearning_model_python_..."
+      ]
+     },
+     "execution_count": 41,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# import h2o\n",
+    "# h2o.init()\n",
+    "\n",
+    "datasets = \"https://raw.githubusercontent.com/DarrenCook/h2o/bk/datasets/\"\n",
+    "data = h2o.import_file(datasets + \"iris_wheader.csv\")\n",
+    "data.frame_id  #iris_wheader.hex\n",
+    "\n",
+    "data = data[:,1:] #Drop column 0. Keep column 1 onwards.\n",
+    "data.frame_id  #py_2_sid_88fe\n",
+    "\n",
+    "data = h2o.assign(data, \"iris\")\n",
+    "data.frame_id  #iris\n",
+    "\n",
+    "h2o.ls()  #iris and iris_wheader.hex, no py_2_sid_88fe\n",
+    "h2o.remove(\"iris_wheader.hex\")\n",
+    "h2o.ls()  #Just lists iris"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "##### h2o.assign() - renames the H20 frame (internal name/ reference name)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Data Summaries"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 44,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Rows:150\n",
+      "Cols:4\n",
+      "\n",
+      "\n"
+     ]
+    },
+    {
+     "data": {
+      "text/html": [
+       "<table>\n",
+       "<thead>\n",
+       "<tr><th>       </th><th>sepal_wid          </th><th>petal_len        </th><th>petal_wid         </th><th>class      </th></tr>\n",
+       "</thead>\n",
+       "<tbody>\n",
+       "<tr><td>type   </td><td>real               </td><td>real             </td><td>real              </td><td>enum       </td></tr>\n",
+       "<tr><td>mins   </td><td>2.0                </td><td>1.0              </td><td>0.1               </td><td>           </td></tr>\n",
+       "<tr><td>mean   </td><td>3.053999999999999  </td><td>3.758666666666667</td><td>1.1986666666666665</td><td>           </td></tr>\n",
+       "<tr><td>maxs   </td><td>4.4                </td><td>6.9              </td><td>2.5               </td><td>           </td></tr>\n",
+       "<tr><td>sigma  </td><td>0.43359431136217375</td><td>1.764420419952262</td><td>0.7631607417008414</td><td>           </td></tr>\n",
+       "<tr><td>zeros  </td><td>0                  </td><td>0                </td><td>0                 </td><td>           </td></tr>\n",
+       "<tr><td>missing</td><td>0                  </td><td>0                </td><td>0                 </td><td>0          </td></tr>\n",
+       "<tr><td>0      </td><td>3.5                </td><td>1.4              </td><td>0.2               </td><td>Iris-setosa</td></tr>\n",
+       "<tr><td>1      </td><td>3.0                </td><td>1.4              </td><td>0.2               </td><td>Iris-setosa</td></tr>\n",
+       "<tr><td>2      </td><td>3.2                </td><td>1.3              </td><td>0.2               </td><td>Iris-setosa</td></tr>\n",
+       "<tr><td>3      </td><td>3.1                </td><td>1.5              </td><td>0.2               </td><td>Iris-setosa</td></tr>\n",
+       "<tr><td>4      </td><td>3.6                </td><td>1.4              </td><td>0.2               </td><td>Iris-setosa</td></tr>\n",
+       "<tr><td>5      </td><td>3.9                </td><td>1.7              </td><td>0.4               </td><td>Iris-setosa</td></tr>\n",
+       "<tr><td>6      </td><td>3.4                </td><td>1.4              </td><td>0.3               </td><td>Iris-setosa</td></tr>\n",
+       "<tr><td>7      </td><td>3.4                </td><td>1.5              </td><td>0.2               </td><td>Iris-setosa</td></tr>\n",
+       "<tr><td>8      </td><td>2.9                </td><td>1.4              </td><td>0.2               </td><td>Iris-setosa</td></tr>\n",
+       "<tr><td>9      </td><td>3.1                </td><td>1.5              </td><td>0.1               </td><td>Iris-setosa</td></tr>\n",
+       "</tbody>\n",
+       "</table>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "data.describe()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 48,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[[], [], [], ['Iris-setosa', 'Iris-versicolor', 'Iris-virginica']]"
+      ]
+     },
+     "execution_count": 48,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "data.levels()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 50,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<table>\n",
+       "<thead>\n",
+       "<tr><th style=\"text-align: right;\">  Probs</th><th style=\"text-align: right;\">  sepal_widQuantiles</th><th style=\"text-align: right;\">  petal_lenQuantiles</th><th style=\"text-align: right;\">  petal_widQuantiles</th><th style=\"text-align: right;\">  classQuantiles</th></tr>\n",
+       "</thead>\n",
+       "<tbody>\n",
+       "<tr><td style=\"text-align: right;\">  0.01 </td><td style=\"text-align: right;\">               2.2  </td><td style=\"text-align: right;\">              1.149 </td><td style=\"text-align: right;\">              0.1   </td><td style=\"text-align: right;\">             nan</td></tr>\n",
+       "<tr><td style=\"text-align: right;\">  0.1  </td><td style=\"text-align: right;\">               2.5  </td><td style=\"text-align: right;\">              1.4   </td><td style=\"text-align: right;\">              0.2   </td><td style=\"text-align: right;\">             nan</td></tr>\n",
+       "<tr><td style=\"text-align: right;\">  0.25 </td><td style=\"text-align: right;\">               2.8  </td><td style=\"text-align: right;\">              1.6   </td><td style=\"text-align: right;\">              0.3   </td><td style=\"text-align: right;\">             nan</td></tr>\n",
+       "<tr><td style=\"text-align: right;\">  0.333</td><td style=\"text-align: right;\">               2.9  </td><td style=\"text-align: right;\">              2.5787</td><td style=\"text-align: right;\">              0.8468</td><td style=\"text-align: right;\">             nan</td></tr>\n",
+       "<tr><td style=\"text-align: right;\">  0.5  </td><td style=\"text-align: right;\">               3    </td><td style=\"text-align: right;\">              4.35  </td><td style=\"text-align: right;\">              1.3   </td><td style=\"text-align: right;\">             nan</td></tr>\n",
+       "<tr><td style=\"text-align: right;\">  0.667</td><td style=\"text-align: right;\">               3.2  </td><td style=\"text-align: right;\">              4.9   </td><td style=\"text-align: right;\">              1.6   </td><td style=\"text-align: right;\">             nan</td></tr>\n",
+       "<tr><td style=\"text-align: right;\">  0.75 </td><td style=\"text-align: right;\">               3.3  </td><td style=\"text-align: right;\">              5.1   </td><td style=\"text-align: right;\">              1.8   </td><td style=\"text-align: right;\">             nan</td></tr>\n",
+       "<tr><td style=\"text-align: right;\">  0.9  </td><td style=\"text-align: right;\">               3.61 </td><td style=\"text-align: right;\">              5.8   </td><td style=\"text-align: right;\">              2.2   </td><td style=\"text-align: right;\">             nan</td></tr>\n",
+       "<tr><td style=\"text-align: right;\">  0.99 </td><td style=\"text-align: right;\">               4.151</td><td style=\"text-align: right;\">              6.7   </td><td style=\"text-align: right;\">              2.5   </td><td style=\"text-align: right;\">             nan</td></tr>\n",
+       "</tbody>\n",
+       "</table>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "data": {
+      "text/plain": []
+     },
+     "execution_count": 50,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# data.describe()\n",
+    "data.quantile() # more detailed than describe"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 52,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[150, 4]"
+      ]
+     },
+     "execution_count": 52,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "data.dim"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 54,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<table>\n",
+       "<thead>\n",
+       "<tr><th style=\"text-align: right;\">  sepal_wid</th><th style=\"text-align: right;\">  petal_len</th><th style=\"text-align: right;\">  petal_wid</th><th>class      </th><th style=\"text-align: right;\">  islong</th></tr>\n",
+       "</thead>\n",
+       "<tbody>\n",
+       "<tr><td style=\"text-align: right;\">        3.5</td><td style=\"text-align: right;\">        1.4</td><td style=\"text-align: right;\">        0.2</td><td>Iris-setosa</td><td style=\"text-align: right;\">       0</td></tr>\n",
+       "<tr><td style=\"text-align: right;\">        3  </td><td style=\"text-align: right;\">        1.4</td><td style=\"text-align: right;\">        0.2</td><td>Iris-setosa</td><td style=\"text-align: right;\">       0</td></tr>\n",
+       "<tr><td style=\"text-align: right;\">        3.2</td><td style=\"text-align: right;\">        1.3</td><td style=\"text-align: right;\">        0.2</td><td>Iris-setosa</td><td style=\"text-align: right;\">       0</td></tr>\n",
+       "<tr><td style=\"text-align: right;\">        3.1</td><td style=\"text-align: right;\">        1.5</td><td style=\"text-align: right;\">        0.2</td><td>Iris-setosa</td><td style=\"text-align: right;\">       0</td></tr>\n",
+       "<tr><td style=\"text-align: right;\">        3.6</td><td style=\"text-align: right;\">        1.4</td><td style=\"text-align: right;\">        0.2</td><td>Iris-setosa</td><td style=\"text-align: right;\">       0</td></tr>\n",
+       "<tr><td style=\"text-align: right;\">        3.9</td><td style=\"text-align: right;\">        1.7</td><td style=\"text-align: right;\">        0.4</td><td>Iris-setosa</td><td style=\"text-align: right;\">       0</td></tr>\n",
+       "<tr><td style=\"text-align: right;\">        3.4</td><td style=\"text-align: right;\">        1.4</td><td style=\"text-align: right;\">        0.3</td><td>Iris-setosa</td><td style=\"text-align: right;\">       0</td></tr>\n",
+       "<tr><td style=\"text-align: right;\">        3.4</td><td style=\"text-align: right;\">        1.5</td><td style=\"text-align: right;\">        0.2</td><td>Iris-setosa</td><td style=\"text-align: right;\">       0</td></tr>\n",
+       "<tr><td style=\"text-align: right;\">        2.9</td><td style=\"text-align: right;\">        1.4</td><td style=\"text-align: right;\">        0.2</td><td>Iris-setosa</td><td style=\"text-align: right;\">       0</td></tr>\n",
+       "<tr><td style=\"text-align: right;\">        3.1</td><td style=\"text-align: right;\">        1.5</td><td style=\"text-align: right;\">        0.1</td><td>Iris-setosa</td><td style=\"text-align: right;\">       0</td></tr>\n",
+       "</tbody>\n",
+       "</table>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "data": {
+      "text/plain": []
+     },
+     "execution_count": 54,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "data[\"islong\"] = (data[\"petal_len\"] > data[\"petal_len\"].mean()[0]).ifelse(1,0)\n",
+    "data\n",
+    "#The next example creates a new numeric column that is 1 when the petal length is greater than average, and 0 everywhere else.\n",
+    "#The syntax is something that evaluates to a boolean, followed by ifelse(if_true, if_false):"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 55,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<table>\n",
+       "<thead>\n",
+       "<tr><th style=\"text-align: right;\">  sepal_wid</th><th style=\"text-align: right;\">  petal_len</th><th style=\"text-align: right;\">  petal_wid</th><th>class      </th><th style=\"text-align: right;\">  islong</th><th>species  </th></tr>\n",
+       "</thead>\n",
+       "<tbody>\n",
+       "<tr><td style=\"text-align: right;\">        3.5</td><td style=\"text-align: right;\">        1.4</td><td style=\"text-align: right;\">        0.2</td><td>Iris-setosa</td><td style=\"text-align: right;\">       0</td><td>setosa   </td></tr>\n",
+       "<tr><td style=\"text-align: right;\">        3  </td><td style=\"text-align: right;\">        1.4</td><td style=\"text-align: right;\">        0.2</td><td>Iris-setosa</td><td style=\"text-align: right;\">       0</td><td>setosa   </td></tr>\n",
+       "<tr><td style=\"text-align: right;\">        3.2</td><td style=\"text-align: right;\">        1.3</td><td style=\"text-align: right;\">        0.2</td><td>Iris-setosa</td><td style=\"text-align: right;\">       0</td><td>setosa   </td></tr>\n",
+       "<tr><td style=\"text-align: right;\">        3.1</td><td style=\"text-align: right;\">        1.5</td><td style=\"text-align: right;\">        0.2</td><td>Iris-setosa</td><td style=\"text-align: right;\">       0</td><td>setosa   </td></tr>\n",
+       "<tr><td style=\"text-align: right;\">        3.6</td><td style=\"text-align: right;\">        1.4</td><td style=\"text-align: right;\">        0.2</td><td>Iris-setosa</td><td style=\"text-align: right;\">       0</td><td>setosa   </td></tr>\n",
+       "<tr><td style=\"text-align: right;\">        3.9</td><td style=\"text-align: right;\">        1.7</td><td style=\"text-align: right;\">        0.4</td><td>Iris-setosa</td><td style=\"text-align: right;\">       0</td><td>setosa   </td></tr>\n",
+       "<tr><td style=\"text-align: right;\">        3.4</td><td style=\"text-align: right;\">        1.4</td><td style=\"text-align: right;\">        0.3</td><td>Iris-setosa</td><td style=\"text-align: right;\">       0</td><td>setosa   </td></tr>\n",
+       "<tr><td style=\"text-align: right;\">        3.4</td><td style=\"text-align: right;\">        1.5</td><td style=\"text-align: right;\">        0.2</td><td>Iris-setosa</td><td style=\"text-align: right;\">       0</td><td>setosa   </td></tr>\n",
+       "<tr><td style=\"text-align: right;\">        2.9</td><td style=\"text-align: right;\">        1.4</td><td style=\"text-align: right;\">        0.2</td><td>Iris-setosa</td><td style=\"text-align: right;\">       0</td><td>setosa   </td></tr>\n",
+       "<tr><td style=\"text-align: right;\">        3.1</td><td style=\"text-align: right;\">        1.5</td><td style=\"text-align: right;\">        0.1</td><td>Iris-setosa</td><td style=\"text-align: right;\">       0</td><td>setosa   </td></tr>\n",
+       "</tbody>\n",
+       "</table>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "data": {
+      "text/plain": []
+     },
+     "execution_count": 55,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "#You can chain modifications together; here I change the enum to a string, use a regex to strip off the prefix, \n",
+    "#and assign that to a new string column:7\n",
+    "\n",
+    "data[\"species\"] = data[\"class\"].ascharacter().gsub(\"Iris-\", \"\")\n",
+    "data"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 58,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<table>\n",
+       "<thead>\n",
+       "<tr><th>class          </th><th style=\"text-align: right;\">  nrow</th><th style=\"text-align: right;\">  mean_petal_len</th><th style=\"text-align: right;\">  sum_islong</th></tr>\n",
+       "</thead>\n",
+       "<tbody>\n",
+       "<tr><td>Iris-setosa    </td><td style=\"text-align: right;\">    50</td><td style=\"text-align: right;\">           1.464</td><td style=\"text-align: right;\">           0</td></tr>\n",
+       "<tr><td>Iris-versicolor</td><td style=\"text-align: right;\">    50</td><td style=\"text-align: right;\">           4.26 </td><td style=\"text-align: right;\">          43</td></tr>\n",
+       "<tr><td>Iris-virginica </td><td style=\"text-align: right;\">    50</td><td style=\"text-align: right;\">           5.552</td><td style=\"text-align: right;\">          50</td></tr>\n",
+       "</tbody>\n",
+       "</table>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "data": {
+      "text/plain": []
+     },
+     "execution_count": 58,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "#group by iris species, count how many of each, calculate the mean petal length of each group, and then how many in that category\n",
+    "#of iris got described as long (which you may remember from the previous section was defined as having a length greater than\n",
+    "#the mean length of all 150 irises):\n",
+    "\n",
+    "data.group_by(\"class\").count().mean(\"petal_len\").sum(\"islong\").frame"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 59,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#The available aggregate functions are count, min, max, mean, mode, sd, ss, sum, and var. var calculates variance,\n",
+    "#ss calculates sum of squares, #and sd is standard deviation. You can also group by more than one column.\n",
+    "\n",
+    "#Remember that all this information is gathered server-side, in a parallel way on big data, \n",
+    "#and just that summary is being returned to your client."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 61,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "image/png": "iVBORw0KGgoAAAANSUhEUgAAAYIAAAEXCAYAAACgUUN5AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAADl0RVh0U29mdHdhcmUAbWF0cGxvdGxpYiB2ZXJzaW9uIDIuMi4yLCBodHRwOi8vbWF0cGxvdGxpYi5vcmcvhp/UCwAAFdpJREFUeJzt3X+wZGV95/H3hwHDLxUNoyGCDiqiaEXAUTFsmRXRwkUFLWMgxEVjgrUaozFZRco1WrsaqM0qbIwiijoqigj+hCQGjWh0QR0QBRwsFAchIAzqZEARAnz3jz7XdK537u07c0+fmfu8X1Vdfc7pc/p8T9+6/ennOb9SVUiS2rXD0AVIkoZlEEhS4wwCSWqcQSBJjTMIJKlxBoEkNc4gUC+SXJXkPw9dx5CSPC/J9UluT3LQwLVclOSPFpjnxUm+Mq2atO0wCLRoSdYnOXzWtP/wJVJVj62qixZ4n1VJKsmOPZU6tL8G/qSqdq+qby7lG3ef2yOX8j3VLoNAy9Y2EDAPA64auAZpQQaBejHeakjypCRrk2xKcnOSt3Wzfbl73th1nzwlyQ5J3pDkuiS3JPlgkvuPve9/7V77cZL/MWs9b0pybpIPJ9kEvLhb98VJNia5Kck7ktxn7P0qycuTXJPktiT/M8kjumU2JTlnfP5Z2zhnrUl+LcntwArgW0m+v5nlK8mfJrk2ya1J/neSHcZe/8Mk65L8NMnnkjysmz7zuX2r+9x+L8kDkpyfZEM3//lJ9t6Sv93Y+h+d5MIkP0ny3SQvHHvtA0n+NskF3ef2tSSP2Jr1aTgGgabhNOC0qrof8AjgnG76U7vnPbruk4uBF3ePpwEPB3YH3gGQ5ADgncBxwF7A/YGHzFrXUcC5wB7AWcA9wJ8BewJPAZ4OvHzWMkcATwAOAV4LnNGtYx/gccCxm9muOWutqjuravdunsdX1XxfkM8DVgMHd7X/YbetRwMnAc8HVgL/DHwUoKpmPrfHd5/bxxj9L7+fUSvkocAddJ/blkiyG3Ah8BHgQYw+g3cmeezYbMcCbwYeAHwPeMuWrk/DMgi0pT7V/cremGQjoy/ozfk34JFJ9qyq26vqknnmPQ54W1VdW1W3A68Hjum6eV4AfLaqvlJVdwFvBGZfLOviqvpUVd1bVXdU1aVVdUlV3V1V64F3A78za5lTqmpTVV0FXAn8Y7f+fwX+Htjcjt75ap3UKVX1k6r6IXAq/x46LwP+qqrWVdXdwFuBA2daBbNV1Y+r6ryq+nlV3cboS3n2di7Gs4H1VfX+7rO7DDiP0d9gxieq6utdfWcBB27F+jQgg0Bb6uiq2mPmwa/+yh73UuBRwNVJvpHk2fPM+5vAdWPj1wE7Ag/uXrt+5oWq+jnw41nLXz8+kuRRXTfJj7ruorcyah2Mu3ls+I45xndnbvPVOqnxeq/r3hNGv+xPGwvanwDhV1tAACTZNcm7u26qTYy63fZIsmIRtYx7GPDkWWF/HPAbY/P8aGz452z+c9I2ziBQ76rqmqo6llEXwynAuV3Xw1yXvr2R0ZfQjIcCdzP6cr4J+GW/d5JdgF+fvbpZ4+8Crgb267qmTmL0hboU5qt1UvvMWv7Gbvh64GXjYVtVu1TV/9vM+/w5sD/w5G47Z7qPtnRbrwe+NGv9u1fVf9vC99M2zCBQ75L8QZKVVXUvsLGbfA+wAbiXUf/6jI8Cf5Zk3yS7M/oF/7Gu++Fc4DlJfrvbgftmFv6iuy+wCbg9yaOBpfwim6/WSf33bkfvPsCrgI91008HXj/TJ9/thP7dseVu5j9+bvdl1HrZmOSBwF9u2Sb90vnAo5K8KMlO3eOJSR6zle+rbZBBoGk4AriqO5LmNOCYqvpF17XzFuCrXffDIcD7gA8x6tr4AfAL4JUAXR/+K4GzGbUObgNuAe6cZ91/Afx+N+97+Pcv2qWw2VoX4dPApcDlwAXAmQBV9UlGraezu66eK4FnjS33JmBN97m9kNH+hV2AW4FLgH/Ysk0a6fYzPBM4hlEr5UddPb+2Ne+rbVO8MY22V92v8I2Mun1+MHQ9i5WkGNX+vaFrUdtsEWi7kuQ53Y7R3RiduXsFsH7YqqTtm0Gg7c1RjLoqbgT2Y9TNZLN2QklO705Cm/04fejaNBy7hiSpcbYIJKlxQ1+UayJ77rlnrVq1augyJGm7cumll95aVSsXmm+7CIJVq1axdu3aocuQpO1KkusWnsuuIUlqnkEgSY0zCCSpcQaBJDXOIJCkxhkEktQ4g0CSGmcQSFLjDAJJatx2cWbx1lh14gVDlzCn9ScfOXQJkgTYIpCk5hkEktQ4g0CSGmcQSFLjDAJJapxBIEmNMwgkqXEGgSQ1ziCQpMYZBJLUOINAkhpnEEhS4wwCSWqcQSBJjes9CJKsSPLNJOd34/sm+VqSa5J8LMl9+q5BkrR502gRvApYNzZ+CvD2qtoP+Cnw0inUIEnajF6DIMnewJHAe7vxAIcB53azrAGO7rMGSdL8+m4RnAq8Fri3G/91YGNV3d2N3wA8pOcaJEnz6C0IkjwbuKWqLh2fPMestZnlT0iyNsnaDRs29FKjJKnfFsGhwHOTrAfOZtQldCqwR5KZeyXvDdw418JVdUZVra6q1StXruyxTElqW29BUFWvr6q9q2oVcAzwT1V1HPBF4AXdbMcDn+6rBknSwoY4j+B1wGuSfI/RPoMzB6hBktTZceFZtl5VXQRc1A1fCzxpGuuVJC3MM4slqXEGgSQ1ziCQpMYZBJLUOINAkhpnEEhS4wwCSWqcQSBJjTMIJKlxBoEkNc4gkKTGGQSS1DiDQJIaZxBIUuMMAklqnEEgSY0zCCSpcQaBJDXOIJCkxhkEktQ4g0CSGmcQSFLjDAJJapxBIEmNMwgkqXEGgSQ1ziCQpMYZBJLUOINAkhpnEEhS4wwCSWqcQSBJjTMIJKlxBoEkNc4gkKTGGQSS1DiDQJIat+PQBUhaeqtOvGDoEua0/uQjhy5Bc+itRZBk5yRfT/KtJFcleXM3fd8kX0tyTZKPJblPXzVIkhbWZ9fQncBhVfV44EDgiCSHAKcAb6+q/YCfAi/tsQZJ0gJ6C4Iaub0b3al7FHAYcG43fQ1wdF81SJIW1uvO4iQrklwO3AJcCHwf2FhVd3ez3AA8pM8aJEnz6zUIquqeqjoQ2Bt4EvCYuWaba9kkJyRZm2Tthg0b+ixTkpo2lcNHq2ojcBFwCLBHkpmjlfYGbtzMMmdU1eqqWr1y5cpplClJTerzqKGVSfbohncBDgfWAV8EXtDNdjzw6b5qkCQtrM/zCPYC1iRZwShwzqmq85N8Bzg7yf8Cvgmc2WMNkqQF9BYEVfVt4KA5pl/LaH+BJGkb4CUmJKlxBoEkNc4gkKTGTRQESR7XdyGSpGFM2iI4vbuA3MtnDgmVJC0PEwVBVf0n4DhgH2Btko8keUavlUmSpmLifQRVdQ3wBuB1wO8A/zfJ1Ume31dxkqT+TbqP4LeSvJ3RmcGHAc+pqsd0w2/vsT5JUs8mPaHsHcB7gJOq6o6ZiVV1Y5I39FKZJGkqJg2C/wLcUVX3ACTZAdi5qn5eVR/qrTpJUu8m3UfweWCXsfFdu2mSpO3cpEGw89jdxuiGd+2nJEnSNE0aBD9LcvDMSJInAHfMM78kaTsx6T6CVwMfTzJzE5m9gN/rpyRJ0jRNFARV9Y0kjwb2BwJcXVX/1mtlkqSpWMz9CJ4IrOqWOSgJVfXBXqqSJE3NREGQ5EPAI4DLgXu6yQUYBJK0nZu0RbAaOKCqqs9iJEnTN2kQXAn8BnBTj7VI0iBWnXjB0CXMaf3JR05lPZMGwZ7Ad5J8HbhzZmJVPbeXqiRJUzNpELypzyIkScOZ9PDRLyV5GLBfVX0+ya7Ain5LkyRNw6SXof5j4Fzg3d2khwCf6qsoSdL0THqJiVcAhwKb4Jc3qXlQX0VJkqZn0iC4s6rumhlJsiOj8wgkSdu5SYPgS0lOAnbp7lX8ceCz/ZUlSZqWSYPgRGADcAXwMuDvGN2/WJK0nZv0qKF7Gd2q8j39liNJmrZJrzX0A+bYJ1BVD1/yiiRJU7WYaw3N2Bn4XeCBS1+OJGnaJtpHUFU/Hnv8S1WdChzWc22SpCmYtGvo4LHRHRi1EO7bS0WSpKmatGvo/4wN3w2sB1645NVIkqZu0qOGntZ3IZKkYUzaNfSa+V6vqrctTTmSpGlbzFFDTwQ+040/B/gycH0fRUmSpmcxN6Y5uKpuA0jyJuDjVfVHfRUmSZqOSYPgocBdY+N3AauWvBpJy9q2ekvI1k0aBB8Cvp7kk4zOMH4e8MHeqpIkTc2kJ5S9BXgJ8FNgI/CSqnrrfMsk2SfJF5OsS3JVkld10x+Y5MIk13TPD9jajZAkbblJrz4KsCuwqapOA25Isu8C898N/HlVPQY4BHhFkgMYXcn0C1W1H/CFblySNJBJb1X5l8DrgNd3k3YCPjzfMlV1U1Vd1g3fBqxjdIvLo4A13WxrgKMXX7YkaalM2iJ4HvBc4GcAVXUji7jERJJVwEHA14AHV9VN3fvcxGZueZnkhCRrk6zdsGHDpKuSJC3SpEFwV1UV3aWok+w26QqS7A6cB7y6qjZNulxVnVFVq6tq9cqVKyddTJK0SJMGwTlJ3g3skeSPgc8zwU1qkuzEKATOqqpPdJNvTrJX9/pewC2LL1uStFQmvdbQX3f3Kt4E7A+8saounG+ZJAHOBNbNugTFZ4DjgZO7509vSeGSpKWxYBAkWQF8rqoOB+b98p/lUOBFwBVJLu+mncQoAM5J8lLgh4xuciNJGsiCQVBV9yT5eZL7V9W/TvrGVfUVIJt5+emTvo8kqV+Tnln8C0a/7C+kO3IIoKr+tJeqJElTM2kQXNA9JEnLzLxBkOShVfXDqloz33ySpO3XQoePfmpmIMl5PdciSRrAQkEwvrP34X0WIkkaxkJBUJsZliQtEwvtLH58kk2MWga7dMN041VV9+u1OklS7+YNgqpaMa1CJEnDmPTwUUlz8NaLWg4Wc2MaSdIyZBBIUuMMAklqnEEgSY0zCCSpcQaBJDXOIJCkxhkEktQ4g0CSGmcQSFLjDAJJapxBIEmNMwgkqXEGgSQ1ziCQpMYZBJLUOINAkhpnEEhS4wwCSWqcQSBJjTMIJKlxBoEkNc4gkKTGGQSS1DiDQJIaZxBIUuMMAklqnEEgSY0zCCSpcb0FQZL3JbklyZVj0x6Y5MIk13TPD+hr/ZKkyfTZIvgAcMSsaScCX6iq/YAvdOOSpAH1FgRV9WXgJ7MmHwWs6YbXAEf3tX5J0mSmvY/gwVV1E0D3/KDNzZjkhCRrk6zdsGHD1AqUpNZsszuLq+qMqlpdVatXrlw5dDmStGxNOwhuTrIXQPd8y5TXL0maZdpB8Bng+G74eODTU16/JGmWPg8f/ShwMbB/khuSvBQ4GXhGkmuAZ3TjkqQB7djXG1fVsZt56el9rVOStHjb7M5iSdJ0GASS1DiDQJIaZxBIUuMMAklqnEEgSY0zCCSpcQaBJDXOIJCkxhkEktQ4g0CSGmcQSFLjDAJJalxvVx/V/FadeMHQJcxp/clHDl3CnLbVz0taDmwRSFLjDAJJapxBIEmNMwgkqXEGgSQ1ziCQpMYZBJLUOINAkhpnEEhS4wwCSWqcQSBJjTMIJKlxBoEkNc4gkKTGGQSS1DiDQJIaZxBIUuMMAklqnEEgSY0zCCSpcQaBJDXOIJCkxhkEktQ4g0CSGjdIECQ5Isl3k3wvyYlD1CBJGpl6ECRZAfwt8CzgAODYJAdMuw5J0sgQLYInAd+rqmur6i7gbOCoAeqQJAE7DrDOhwDXj43fADx59kxJTgBO6EZvT/LdrVjnnsCtW7H89mKrtzOnLFEl/fLvuby4nZuxBP+PD5tkpiGCIHNMq1+ZUHUGcMaSrDBZW1Wrl+K9tmVu5/Lidi4v2/J2DtE1dAOwz9j43sCNA9QhSWKYIPgGsF+SfZPcBzgG+MwAdUiSGKBrqKruTvInwOeAFcD7quqqnle7JF1M2wG3c3lxO5eXbXY7U/Ur3fOSpIZ4ZrEkNc4gkKTGLesgSLJPki8mWZfkqiSvGrqmPiTZOcnXk3yr2843D11TX5KsSPLNJOcPXUufkqxPckWSy5OsHbqeviTZI8m5Sa7u/k+fMnRNSy3J/t3fceaxKcmrh65r3LLeR5BkL2CvqrosyX2BS4Gjq+o7A5e2pJIE2K2qbk+yE/AV4FVVdcnApS25JK8BVgP3q6pnD11PX5KsB1ZX1bI+0SrJGuCfq+q93VGEu1bVxqHr6kt3iZ1/AZ5cVdcNXc+MZd0iqKqbquqybvg2YB2jM5uXlRq5vRvdqXssu4RPsjdwJPDeoWvR1ktyP+CpwJkAVXXXcg6BztOB729LIQDLPAjGJVkFHAR8bdhK+tF1mVwO3AJcWFXLcTtPBV4L3Dt0IVNQwD8mubS73Mpy9HBgA/D+rrvvvUl2G7qonh0DfHToImZrIgiS7A6cB7y6qjYNXU8fquqeqjqQ0ZnaT0ryuKFrWkpJng3cUlWXDl3LlBxaVQczukrvK5I8deiCerAjcDDwrqo6CPgZsGwvS991fT0X+PjQtcy27IOg6zM/Dzirqj4xdD1965rWFwFHDFzKUjsUeG7Xd342cFiSDw9bUn+q6sbu+Rbgk4yu2rvc3ADcMNZ6PZdRMCxXzwIuq6qbhy5ktmUdBN1O1DOBdVX1tqHr6UuSlUn26IZ3AQ4Hrh62qqVVVa+vqr2rahWj5vU/VdUfDFxWL5Ls1h3cQNdV8kzgymGrWnpV9SPg+iT7d5OeDiyrAzlmOZZtsFsIhrn66DQdCrwIuKLrPwc4qar+bsCa+rAXsKY7ImEH4JyqWtaHVy5zDwY+Ofodw47AR6rqH4YtqTevBM7quk2uBV4ycD29SLIr8AzgZUPXMpdlffioJGlhy7prSJK0MINAkhpnEEhS4wwCSWqcQSBJjTMIJKlxBoE0hyQvTvKbE8z3gSQvmOf1i5KsXtrqpKVlEEhzezGwYBBIy4FBoCYkWdXd/GRNkm93N0PZNckTknypu8rn55Ls1f3CX83ojNfLk+yS5I1JvpHkyiRndJcvWWwNz0xycZLLkny8uxjizE1o3txNvyLJo5d6+6X5GARqyf7AGVX1W8Am4BXA3wAvqKonAO8D3lJV5wJrgeOq6sCqugN4R1U9saoeB+wCLOqmOEn2BN4AHN5dVXQt8JqxWW7tpr8L+Iut2kppkZb7tYakcddX1Ve74Q8DJwGPAy7sfuCvAG7azLJPS/JaYFfggcBVwGcXse5DgAOAr3brug9w8djrM1fGvRR4/iLeV9pqBoFaMvvCWrcBV1XVvPfJTbIz8E5Gt468PsmbgJ0Xue4wumHQsZt5/c7u+R78v9SU2TWkljx07OboxwKXACtnpiXZKclju9dvA+7bDc986d/a9etv9iiheVwCHJrkkd26dk3yqC3ZCGmpGQRqyTrg+CTfZtS98zeMvtRPSfIt4HLgt7t5PwCc3l2+/E7gPcAVwKeAbyx2xVW1gdGRSB/t1n8J4E5hbRO8DLWa0N2z+vxuZ6+kMbYIJKlxtgikJZDkk8C+sya/rqo+N0Q90mIYBJLUOLuGJKlxBoEkNc4gkKTGGQSS1Lj/D2vrATDZ1kvSAAAAAElFTkSuQmCC\n",
+      "text/plain": [
+       "<Figure size 432x288 with 1 Axes>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "data[\"petal_len\"].hist()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Indexing"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 64,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<table>\n",
+       "<thead>\n",
+       "<tr><th style=\"text-align: right;\">  sepal_wid</th><th style=\"text-align: right;\">  petal_len</th><th style=\"text-align: right;\">  petal_wid</th><th>class      </th><th style=\"text-align: right;\">  islong</th><th>species  </th></tr>\n",
+       "</thead>\n",
+       "<tbody>\n",
+       "<tr><td style=\"text-align: right;\">        3.5</td><td style=\"text-align: right;\">        1.4</td><td style=\"text-align: right;\">        0.2</td><td>Iris-setosa</td><td style=\"text-align: right;\">       0</td><td>setosa   </td></tr>\n",
+       "<tr><td style=\"text-align: right;\">        3  </td><td style=\"text-align: right;\">        1.4</td><td style=\"text-align: right;\">        0.2</td><td>Iris-setosa</td><td style=\"text-align: right;\">       0</td><td>setosa   </td></tr>\n",
+       "<tr><td style=\"text-align: right;\">        3.2</td><td style=\"text-align: right;\">        1.3</td><td style=\"text-align: right;\">        0.2</td><td>Iris-setosa</td><td style=\"text-align: right;\">       0</td><td>setosa   </td></tr>\n",
+       "<tr><td style=\"text-align: right;\">        3.1</td><td style=\"text-align: right;\">        1.5</td><td style=\"text-align: right;\">        0.2</td><td>Iris-setosa</td><td style=\"text-align: right;\">       0</td><td>setosa   </td></tr>\n",
+       "<tr><td style=\"text-align: right;\">        3.6</td><td style=\"text-align: right;\">        1.4</td><td style=\"text-align: right;\">        0.2</td><td>Iris-setosa</td><td style=\"text-align: right;\">       0</td><td>setosa   </td></tr>\n",
+       "<tr><td style=\"text-align: right;\">        3.9</td><td style=\"text-align: right;\">        1.7</td><td style=\"text-align: right;\">        0.4</td><td>Iris-setosa</td><td style=\"text-align: right;\">       0</td><td>setosa   </td></tr>\n",
+       "<tr><td style=\"text-align: right;\">        3.4</td><td style=\"text-align: right;\">        1.4</td><td style=\"text-align: right;\">        0.3</td><td>Iris-setosa</td><td style=\"text-align: right;\">       0</td><td>setosa   </td></tr>\n",
+       "<tr><td style=\"text-align: right;\">        3.4</td><td style=\"text-align: right;\">        1.5</td><td style=\"text-align: right;\">        0.2</td><td>Iris-setosa</td><td style=\"text-align: right;\">       0</td><td>setosa   </td></tr>\n",
+       "<tr><td style=\"text-align: right;\">        2.9</td><td style=\"text-align: right;\">        1.4</td><td style=\"text-align: right;\">        0.2</td><td>Iris-setosa</td><td style=\"text-align: right;\">       0</td><td>setosa   </td></tr>\n",
+       "<tr><td style=\"text-align: right;\">        3.1</td><td style=\"text-align: right;\">        1.5</td><td style=\"text-align: right;\">        0.1</td><td>Iris-setosa</td><td style=\"text-align: right;\">       0</td><td>setosa   </td></tr>\n",
+       "</tbody>\n",
+       "</table>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "# data.head() # 6 rows\n",
+    "data.show() # 10 rows\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### #When you want to fetch more than 6 (or 10) rows, you use as_data_frame() in Python to download them"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 66,
+   "metadata": {},
+   "outputs": [
+    {
+     "ename": "AttributeError",
+     "evalue": "'H2OFrame' object has no attribute 'info'",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[1;31m---------------------------------------------------------------------------\u001b[0m",
+      "\u001b[1;31mAttributeError\u001b[0m                            Traceback (most recent call last)",
+      "\u001b[1;32m<ipython-input-66-9716f16c2001>\u001b[0m in \u001b[0;36m<module>\u001b[1;34m()\u001b[0m\n\u001b[1;32m----> 1\u001b[1;33m \u001b[0mdata\u001b[0m\u001b[1;33m.\u001b[0m\u001b[0minfo\u001b[0m\u001b[1;33m(\u001b[0m\u001b[1;33m)\u001b[0m \u001b[1;31m# error as it is not a pandas dataframe, it is a H20 data frame\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[0m",
+      "\u001b[1;31mAttributeError\u001b[0m: 'H2OFrame' object has no attribute 'info'"
+     ]
+    }
+   ],
+   "source": [
+    "data.info() # error as it is not a pandas dataframe, it is a H20 data frame"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 68,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "<class 'pandas.core.frame.DataFrame'>\n",
+      "RangeIndex: 150 entries, 0 to 149\n",
+      "Data columns (total 6 columns):\n",
+      " #   Column     Non-Null Count  Dtype  \n",
+      "---  ------     --------------  -----  \n",
+      " 0   sepal_wid  150 non-null    float64\n",
+      " 1   petal_len  150 non-null    float64\n",
+      " 2   petal_wid  150 non-null    float64\n",
+      " 3   class      150 non-null    object \n",
+      " 4   islong     150 non-null    int64  \n",
+      " 5   species    150 non-null    object \n",
+      "dtypes: float64(3), int64(1), object(2)\n",
+      "memory usage: 7.2+ KB\n"
+     ]
+    }
+   ],
+   "source": [
+    "# lets download the data (dont do this if data is big) into pandas data frame -\n",
+    "d = data.as_data_frame()\n",
+    "d.info()  #Describes the pandas DataFrame internals - now it worked\n",
+    "# d.corr(method=\"spearman\").round(2)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 70,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# H2O’s R and Python bindings try to cover all the common functionality of R and Python,\n",
+    "#so you should only rarely need to download data.\n",
+    "#It does indeed have its own cor() function, and you could do data.cor().round(2), \n",
+    "#but H2O doesn’t support Spearman correlation, only Pearson, so I chose that for this example.\n",
+    "\n",
+    "#Is there a limit on how much data you can download? Maybe. There is the hard limit of the memory on your client machine,of course.\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Split Data Already in H2O"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 71,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "train, test, valid = data.split_frame([0.6, 0.2])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Rows and Columns"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 75,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Checking whether there is an H2O instance running at http://localhost:54321 . connected.\n"
+     ]
+    },
+    {
+     "data": {
+      "text/html": [
+       "<div style=\"overflow:auto\"><table style=\"width:50%\"><tr><td>H2O_cluster_uptime:</td>\n",
+       "<td>1 day 23 hours 59 mins</td></tr>\n",
+       "<tr><td>H2O_cluster_timezone:</td>\n",
+       "<td>Asia/Kolkata</td></tr>\n",
+       "<tr><td>H2O_data_parsing_timezone:</td>\n",
+       "<td>UTC</td></tr>\n",
+       "<tr><td>H2O_cluster_version:</td>\n",
+       "<td>3.32.1.1</td></tr>\n",
+       "<tr><td>H2O_cluster_version_age:</td>\n",
+       "<td>25 days </td></tr>\n",
+       "<tr><td>H2O_cluster_name:</td>\n",
+       "<td>H2O_from_python_MalikM_f9yx6y</td></tr>\n",
+       "<tr><td>H2O_cluster_total_nodes:</td>\n",
+       "<td>1</td></tr>\n",
+       "<tr><td>H2O_cluster_free_memory:</td>\n",
+       "<td>1.581 Gb</td></tr>\n",
+       "<tr><td>H2O_cluster_total_cores:</td>\n",
+       "<td>4</td></tr>\n",
+       "<tr><td>H2O_cluster_allowed_cores:</td>\n",
+       "<td>4</td></tr>\n",
+       "<tr><td>H2O_cluster_status:</td>\n",
+       "<td>locked, healthy</td></tr>\n",
+       "<tr><td>H2O_connection_url:</td>\n",
+       "<td>http://localhost:54321</td></tr>\n",
+       "<tr><td>H2O_connection_proxy:</td>\n",
+       "<td>{\"http\": null, \"https\": null}</td></tr>\n",
+       "<tr><td>H2O_internal_security:</td>\n",
+       "<td>False</td></tr>\n",
+       "<tr><td>H2O_API_Extensions:</td>\n",
+       "<td>Amazon S3, Algos, AutoML, Core V3, TargetEncoder, Core V4</td></tr>\n",
+       "<tr><td>Python_version:</td>\n",
+       "<td>3.6.5 final</td></tr></table></div>"
+      ],
+      "text/plain": [
+       "--------------------------  ---------------------------------------------------------\n",
+       "H2O_cluster_uptime:         1 day 23 hours 59 mins\n",
+       "H2O_cluster_timezone:       Asia/Kolkata\n",
+       "H2O_data_parsing_timezone:  UTC\n",
+       "H2O_cluster_version:        3.32.1.1\n",
+       "H2O_cluster_version_age:    25 days\n",
+       "H2O_cluster_name:           H2O_from_python_MalikM_f9yx6y\n",
+       "H2O_cluster_total_nodes:    1\n",
+       "H2O_cluster_free_memory:    1.581 Gb\n",
+       "H2O_cluster_total_cores:    4\n",
+       "H2O_cluster_allowed_cores:  4\n",
+       "H2O_cluster_status:         locked, healthy\n",
+       "H2O_connection_url:         http://localhost:54321\n",
+       "H2O_connection_proxy:       {\"http\": null, \"https\": null}\n",
+       "H2O_internal_security:      False\n",
+       "H2O_API_Extensions:         Amazon S3, Algos, AutoML, Core V3, TargetEncoder, Core V4\n",
+       "Python_version:             3.6.5 final\n",
+       "--------------------------  ---------------------------------------------------------"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Parse progress: |█████████████████████████████████████████████████████████| 100%\n"
+     ]
+    }
+   ],
+   "source": [
+    "import h2o\n",
+    "h2o.init()\n",
+    "\n",
+    "datasets = \"https://raw.githubusercontent.com/DarrenCook/h2o/bk/datasets/\"\n",
+    "data = h2o.import_file(datasets + \"iris_wheader.csv\")\n",
+    "\n",
+    "ratio_frame = data[\"petal_wid\"] / data[\"sepal_wid\"]\n",
+    "ratio_frame.col_names = [\"ratio\"]\n",
+    "data = data.cbind(ratio_frame)\n",
+    "data = h2o.assign(data, \"iris\")\n",
+    "#ratio_frame.remove() - not working for now!!\n",
+    "\n",
+    "#The cbind operation is lazy. That means it delays actually joining the frames together until it has to. \n",
+    "#If I were to move the ratio_frame.remove() up one line, directly after the cbind, doing anything with data would then fail:\n",
+    "#we’ve removed part of its data before it got a chance to actually do the copy. \n",
+    "#That is what the h2o.assign() call is doing (apart from giving a nice name to the new frame, of course).\n",
+    "#Other functions that will eagerly evaluate the data are nrow(), ncol(), or dim() (to find out how large it is), or any indexing or summarizing command. In fact, printing data would have been enough.\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 76,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#rbind is the equivalent for joining frames together vertically: each frame must have exactly the same columns; \n",
+    "#just as when cbind-ing, each frame must have exactly the same number of rows.\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 77,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# h2o.merge() is for joining two frames together, based on columns they have in common, just like a join in SQL. \n",
+    "# The frames can be of different lengths.\n",
+    "\n",
+    "#H2O’s merge refuses to run with floating-point numbers. Integers or enums only. H2O uses a kind of duck-typing for numbers: \n",
+    "#if all entries in a column are whole numbers it is an int column, but if at least one entry has a fractional part then it \n",
+    "#is a real column. Therefore, the way to integer-ize a column is to call round().After that, merge() with all defaults does the job."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 78,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Parse progress: |█████████████████████████████████████████████████████████| 100%\n"
+     ]
+    }
+   ],
+   "source": [
+    "prices = h2o.H2OFrame({\n",
+    "  'petal_len':[2, 3, 4, 5],\n",
+    "  'price':[4, 5.5, 8, 10]\n",
+    "  })"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 79,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Lets merge prices (H2o df) with data (H2o df)\n",
+    "data[\"petal_len\"] = data[\"petal_len\"].round() # as mentioned above - h2o merge refuses if the column has decimal value\n",
+    "iris_prices = data.merge(prices)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 81,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<table>\n",
+       "<thead>\n",
+       "<tr><th style=\"text-align: right;\">  petal_len</th><th style=\"text-align: right;\">  sepal_len</th><th style=\"text-align: right;\">  sepal_wid</th><th style=\"text-align: right;\">  petal_wid</th><th>class      </th><th style=\"text-align: right;\">    ratio</th><th style=\"text-align: right;\">  price</th></tr>\n",
+       "</thead>\n",
+       "<tbody>\n",
+       "<tr><td style=\"text-align: right;\">          2</td><td style=\"text-align: right;\">        4.6</td><td style=\"text-align: right;\">        3.1</td><td style=\"text-align: right;\">        0.2</td><td>Iris-setosa</td><td style=\"text-align: right;\">0.0645161</td><td style=\"text-align: right;\">      4</td></tr>\n",
+       "<tr><td style=\"text-align: right;\">          2</td><td style=\"text-align: right;\">        5.4</td><td style=\"text-align: right;\">        3.9</td><td style=\"text-align: right;\">        0.4</td><td>Iris-setosa</td><td style=\"text-align: right;\">0.102564 </td><td style=\"text-align: right;\">      4</td></tr>\n",
+       "<tr><td style=\"text-align: right;\">          2</td><td style=\"text-align: right;\">        5  </td><td style=\"text-align: right;\">        3.4</td><td style=\"text-align: right;\">        0.2</td><td>Iris-setosa</td><td style=\"text-align: right;\">0.0588235</td><td style=\"text-align: right;\">      4</td></tr>\n",
+       "<tr><td style=\"text-align: right;\">          2</td><td style=\"text-align: right;\">        4.9</td><td style=\"text-align: right;\">        3.1</td><td style=\"text-align: right;\">        0.1</td><td>Iris-setosa</td><td style=\"text-align: right;\">0.0322581</td><td style=\"text-align: right;\">      4</td></tr>\n",
+       "<tr><td style=\"text-align: right;\">          2</td><td style=\"text-align: right;\">        5.4</td><td style=\"text-align: right;\">        3.7</td><td style=\"text-align: right;\">        0.2</td><td>Iris-setosa</td><td style=\"text-align: right;\">0.0540541</td><td style=\"text-align: right;\">      4</td></tr>\n",
+       "<tr><td style=\"text-align: right;\">          2</td><td style=\"text-align: right;\">        4.8</td><td style=\"text-align: right;\">        3.4</td><td style=\"text-align: right;\">        0.2</td><td>Iris-setosa</td><td style=\"text-align: right;\">0.0588235</td><td style=\"text-align: right;\">      4</td></tr>\n",
+       "<tr><td style=\"text-align: right;\">          2</td><td style=\"text-align: right;\">        5.7</td><td style=\"text-align: right;\">        4.4</td><td style=\"text-align: right;\">        0.4</td><td>Iris-setosa</td><td style=\"text-align: right;\">0.0909091</td><td style=\"text-align: right;\">      4</td></tr>\n",
+       "<tr><td style=\"text-align: right;\">          2</td><td style=\"text-align: right;\">        5.7</td><td style=\"text-align: right;\">        3.8</td><td style=\"text-align: right;\">        0.3</td><td>Iris-setosa</td><td style=\"text-align: right;\">0.0789474</td><td style=\"text-align: right;\">      4</td></tr>\n",
+       "<tr><td style=\"text-align: right;\">          2</td><td style=\"text-align: right;\">        5.1</td><td style=\"text-align: right;\">        3.8</td><td style=\"text-align: right;\">        0.3</td><td>Iris-setosa</td><td style=\"text-align: right;\">0.0789474</td><td style=\"text-align: right;\">      4</td></tr>\n",
+       "<tr><td style=\"text-align: right;\">          2</td><td style=\"text-align: right;\">        5.4</td><td style=\"text-align: right;\">        3.4</td><td style=\"text-align: right;\">        0.2</td><td>Iris-setosa</td><td style=\"text-align: right;\">0.0588235</td><td style=\"text-align: right;\">      4</td></tr>\n",
+       "</tbody>\n",
+       "</table>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    },
+    {
+     "data": {
+      "text/plain": []
+     },
+     "execution_count": 81,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "iris_prices"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Getting Data Out of H2O\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 82,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Broadly speaking, there are two things you might want to extract from H2O:\n",
+    "\n",
+    "#Frames\n",
+    "\n",
+    "#Models\n",
+    "\n",
+    "#Frames could be data you’ve previously imported (and possibly modified), or generated, or it might be predictions from a model.\n",
+    "#Models can be exported in a binary format for re-importing at a later time, or as POJOs (Plain Old Java Objects) for \n",
+    "#running models without H2O. We will look at each of these.\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 83,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#WARNING\n",
+    "#When you shut down your H2O cluster, all data and models are lost: nothing is saved to disk unless you explicitly request it.\n",
+    "#And with a cluster, if even just one node becomes unresponsive, the same thing. \n",
+    "# For long-running jobs, a regular export is a good idea."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Exporting Data Frames"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 84,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Exported files are in csv format, and similarly to the way importing worked, we have two choices for where to export them to:\n",
+    "\n",
+    "# 1) To our local machine (where the client runs)\n",
+    "\n",
+    "# 2) To the H2O server’s local disk, or HDFS or S3"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 85,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# If df is the data frame, for a local download, use h2o.downloadCSV(df, \"/path/to/data.csv\") in R,\n",
+    "# or h2o.download_csv(df,\"/path/to/data.csv\") in Python.\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 86,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# For saving to a location on the H2O server, use h2o.exportFile() (h2o.export_file() in Python), where the first parameter \n",
+    "#is the frame to save, and the second is the disk path and filename. To save to HDFS use an “hdfs://” prefix, and to save to s3,\n",
+    "#use an “s3://” prefix (or try the older “s3n://” if you have problems). As with importing, you can also specify your AWS\n",
+    "# credentials when starting up h2o.jar or in the pathname. Here are some examples:\n",
+    "\n",
+    "# h2o.exportFile(d, \"/path/to/d.csv\")\n",
+    "# h2o.exportFile(d, \"s3://mybucket/d.csv\")\n",
+    "# h2o.exportFile(d, \"s3://<AWS_ACCESS_KEY>:<AWS_SECRET_KEY>@mybucket/d.csv\")\n",
+    "# h2o.exportFile(d, \"hdfs://namenode/path/to/d.csv\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### POJO"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 87,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# POJOs\n",
+    "#Is it just me, or does POJO sound like something people used to bounce up and down on in the 1970s? Ah, just me.\n",
+    "#Oh well. POJO stands for Plain Old Java Object. In the context of H2O, it refers to a self-contained Java file with everything\n",
+    "#needed to use your model. Taking the example of a deep learning model, the POJO file would contain Java code for the algorithms,\n",
+    "#and Java arrays containing all the weights/biases of all the layers. The idea is that you can run it to make predictions, \n",
+    "#without having to install the rest of H2O. There is a special jar file (h2o-genmodel.jar) that you run to use the POJO file."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 88,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# how to save it to your /tmp/ directory: h2o.download_pojo(m, \"/tmp\") and, again,\n",
+    "# give the third parameter as False if you don’t want the jar file each time."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Model Files"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 89,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# The POJO is a Java program, and cannot be imported back into H2O to re-create a model. It doesn’t contain any of the \n",
+    "# information on training statistics, or what parameters it was trained with. For that you need to get the binary model file.\n",
+    "\n",
+    "# Because the file contents are in a binary format, only of meaning to H2O, you don’t download the model file: \n",
+    "# you just request it be saved. And then later you can request it be loaded.13"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 90,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# fname = h2o.save_model(model, \"/tmp\") (where model is a model you’ve generated or fetched). \n",
+    "#The model ID will be used as the filename, and it is the full path and filename that is returned. If it already exists, \n",
+    "#the command will fail; to force it to be overwritten give the third parameter as true: h2o.save_model(model, \"/tmp\", True).\n",
+    "\n",
+    "#To load it back in later, you will need the filename you were given. The command is what you expect (R: h2o.loadModel(fname), \n",
+    "#Python: h2o.load_model(fname)). It gets created in H2O with the same model ID it had before.\n",
+    "#(The model ID cannot be changed; use h2o.assign() after loading each model if that creates a conflict.)\n",
+    "\n",
+    "#The path you specify should not end in a forward slash. The good news is that if the directory does not exist, \n",
+    "#H2O will create it for you (assuming it has permission to). So, there is no excuse not to use a good naming scheme:\n",
+    "#fname <- h2o.saveModel(model, \"/tmp/h2o_models/mnist_tests1\"). (Also consider using a datestamp as a subfolder.)\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 91,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#******************* CHAPTER 2 ENDS****************************************************#"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.6.5"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
