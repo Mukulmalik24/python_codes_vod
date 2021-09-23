@@ -1,0 +1,1661 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### for loop"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### https://realpython.com/python-for-loop/"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "['aa', 'bb', 'cc']\n",
+      "aa\n",
+      "bb\n",
+      "cc\n"
+     ]
+    }
+   ],
+   "source": [
+    "lis=['aa','bb','cc']\n",
+    "print(lis)\n",
+    "for i in lis:\n",
+    "    print (i)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "('aa', 'bb', 'cc')\n"
+     ]
+    }
+   ],
+   "source": [
+    "tup=('aa','bb','cc')\n",
+    "print(tup)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "aa\n",
+      "bb\n",
+      "cc\n"
+     ]
+    }
+   ],
+   "source": [
+    "for i in tup:\n",
+    "    print(i)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#All the data types you have encountered so far that are collection or container types are iterable. \n",
+    "#These include the string, list, tuple, dict, set, and frozenset types."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "<str_iterator at 0x2a4168b8fd0>"
+      ]
+     },
+     "execution_count": 10,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "iter('foobar')                             # String"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "<list_iterator at 0x2a4168c52e8>"
+      ]
+     },
+     "execution_count": 12,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "iter(['foo', 'bar', 'baz'])                # List"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "<tuple_iterator at 0x2a4168c5208>"
+      ]
+     },
+     "execution_count": 14,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "iter(('foo', 'bar', 'baz'))                # Tuple\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "<set_iterator at 0x2a4168cb1f8>"
+      ]
+     },
+     "execution_count": 15,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "iter({'foo', 'bar', 'baz'})                # Set"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "<dict_keyiterator at 0x2a416856e58>"
+      ]
+     },
+     "execution_count": 16,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "iter({'foo': 1, 'bar': 2, 'baz': 3})       # Dict"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#These object types, on the other hand, aren’t iterable:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 19,
+   "metadata": {},
+   "outputs": [
+    {
+     "ename": "TypeError",
+     "evalue": "'int' object is not iterable",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[1;31m---------------------------------------------------------------------------\u001b[0m",
+      "\u001b[1;31mTypeError\u001b[0m                                 Traceback (most recent call last)",
+      "\u001b[1;32m<ipython-input-19-748c03dc907c>\u001b[0m in \u001b[0;36m<module>\u001b[1;34m()\u001b[0m\n\u001b[1;32m----> 1\u001b[1;33m \u001b[0miter\u001b[0m\u001b[1;33m(\u001b[0m\u001b[1;36m4\u001b[0m\u001b[1;33m)\u001b[0m \u001b[1;31m#int\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[0m",
+      "\u001b[1;31mTypeError\u001b[0m: 'int' object is not iterable"
+     ]
+    }
+   ],
+   "source": [
+    "iter(4) #int"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 21,
+   "metadata": {},
+   "outputs": [
+    {
+     "ename": "TypeError",
+     "evalue": "'float' object is not iterable",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[1;31m---------------------------------------------------------------------------\u001b[0m",
+      "\u001b[1;31mTypeError\u001b[0m                                 Traceback (most recent call last)",
+      "\u001b[1;32m<ipython-input-21-979b1489e4f8>\u001b[0m in \u001b[0;36m<module>\u001b[1;34m()\u001b[0m\n\u001b[1;32m----> 1\u001b[1;33m \u001b[0miter\u001b[0m\u001b[1;33m(\u001b[0m\u001b[1;36m3.4\u001b[0m\u001b[1;33m)\u001b[0m   \u001b[1;31m#float\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[0m",
+      "\u001b[1;31mTypeError\u001b[0m: 'float' object is not iterable"
+     ]
+    }
+   ],
+   "source": [
+    "iter(3.4)   #float"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "['aa', 'bb', 'cc']"
+      ]
+     },
+     "execution_count": 1,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "a=('aa','bb','cc')\n",
+    "it=iter(a)\n",
+    "list(it)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "('aa', 'bb', 'cc')"
+      ]
+     },
+     "execution_count": 2,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "b=('aa','bb','cc')\n",
+    "it=iter(b)\n",
+    "tuple(it)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "{'aa', 'bb', 'cc'}"
+      ]
+     },
+     "execution_count": 3,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "b=('aa','bb','cc')\n",
+    "it=iter(b)\n",
+    "set(it)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "'aa'"
+      ]
+     },
+     "execution_count": 7,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "a=('aa','bb')\n",
+    "it=iter(a)\n",
+    "next(it)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "'bb'"
+      ]
+     },
+     "execution_count": 8,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "next(it)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "metadata": {},
+   "outputs": [
+    {
+     "ename": "StopIteration",
+     "evalue": "",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[1;31m---------------------------------------------------------------------------\u001b[0m",
+      "\u001b[1;31mStopIteration\u001b[0m                             Traceback (most recent call last)",
+      "\u001b[1;32m<ipython-input-10-38ee426b4e84>\u001b[0m in \u001b[0;36m<module>\u001b[1;34m()\u001b[0m\n\u001b[1;32m----> 1\u001b[1;33m \u001b[0mnext\u001b[0m\u001b[1;33m(\u001b[0m\u001b[0mit\u001b[0m\u001b[1;33m)\u001b[0m \u001b[1;31m# iter are finished, no more iters are left\u001b[0m\u001b[1;33m\u001b[0m\u001b[0m\n\u001b[0m",
+      "\u001b[1;31mStopIteration\u001b[0m: "
+     ]
+    }
+   ],
+   "source": [
+    "next(it) # iter are finished, no more iters are left"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "aa\n",
+      "2\n",
+      "cc\n"
+     ]
+    }
+   ],
+   "source": [
+    "a=['aa',2,'cc']\n",
+    "for i in a:\n",
+    "    print(i)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# #•Calls iter() to obtain an iterator for a\n",
+    "# •Calls next() repeatedly to obtain each item from the iterator in turn\n",
+    "# •Terminates the loop when next() raises the StopIteration exception\n",
+    "\n",
+    "#--------------------------------------------------------------------------------------------------#\n",
+    "\n",
+    "# Python treats looping over all iterables in exactly this way, and in Python, iterables and iterators abound:\n",
+    "\n",
+    "# •Many built-in and library objects are iterable.\n",
+    "\n",
+    "\n",
+    "# •There is a Standard Library module called itertools containing many functions that return iterables.\n",
+    "\n",
+    "\n",
+    "# •User-defined objects created with Python’s object-oriented capability can be made to be iterable.\n",
+    "\n",
+    "\n",
+    "# •Python features a construct called a generator that allows you to create your own iterator in a simple, straightforward way.\n",
+    "\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Iteratig through a dictionary"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "{'key1': 1, 'key2': 'two', 'key3': 3}\n"
+     ]
+    }
+   ],
+   "source": [
+    "d={'key1':1, 'key2':'two', 'key3':3}\n",
+    "print(d)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 20,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "1\n",
+      "two\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(d['key1'])\n",
+    "print(d['key2'])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 21,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "key1\n",
+      "key2\n",
+      "key3\n"
+     ]
+    }
+   ],
+   "source": [
+    "for i in d:\n",
+    "    print(i)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 22,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "1\n",
+      "two\n",
+      "3\n"
+     ]
+    }
+   ],
+   "source": [
+    "for i in d:\n",
+    "    print(d[i]) # just like d['key1']  above"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 25,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "1\n",
+      "two\n",
+      "3\n"
+     ]
+    }
+   ],
+   "source": [
+    "#or\n",
+    "for i in d.values():\n",
+    "    print(i)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 26,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#As noted in the tutorial on Python dictionaries, the dictionary method .items() effectively returns a list \n",
+    "#of key/value pairs as tuples:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 28,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "dict_items([('key1', 1), ('key2', 'two'), ('key3', 3)])"
+      ]
+     },
+     "execution_count": 28,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "d.items()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 31,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "dict_items([('key1', 1), ('key2', 'two'), ('key3', 3)])\n",
+      "dict_items([('key1', 1), ('key2', 'two'), ('key3', 3)])\n",
+      "dict_items([('key1', 1), ('key2', 'two'), ('key3', 3)])\n"
+     ]
+    }
+   ],
+   "source": [
+    "# dict.item in loop to access key and values both\n",
+    "for i in d:\n",
+    "    print(d.items())"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 33,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "key= key1 ,  value= 1\n",
+      "key= key2 ,  value= two\n",
+      "key= key3 ,  value= 3\n"
+     ]
+    }
+   ],
+   "source": [
+    "for k,v in d.items():\n",
+    "    print('key=',k, ',  value=',v)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "\n",
+    "### The range() Function"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 35,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "1\n",
+      "2\n",
+      "3\n"
+     ]
+    }
+   ],
+   "source": [
+    "for i in (1,2,3):\n",
+    "    print(i)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 36,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#range(<end>) returns an iterable that yields integers starting with 0, up to but not including <end>:\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 39,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "range(0, 5)\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "range"
+      ]
+     },
+     "execution_count": 39,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "x=range(5)\n",
+    "print(x)\n",
+    "type(x)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 40,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Note that range() returns an object of class range, not a list or tuple of the values.\n",
+    "# Because a range object is an iterable, you can obtain the values by iterating over them with a for loop:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 42,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "0\n",
+      "1\n",
+      "2\n",
+      "3\n",
+      "4\n"
+     ]
+    }
+   ],
+   "source": [
+    "for i in range(5):\n",
+    "    print(i)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 45,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[0, 1, 2, 3]"
+      ]
+     },
+     "execution_count": 45,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "x=range(4)\n",
+    "list(x)\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 46,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "(0, 1, 2, 3)"
+      ]
+     },
+     "execution_count": 46,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "tuple(x)\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 47,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "{0, 1, 2, 3}"
+      ]
+     },
+     "execution_count": 47,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "set(x)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 52,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#range(<begin>, <end>, <stride>) \n",
+    "#returns an iterable that yields integers starting with <begin>, up to but not including <end>. \n",
+    "#If specified, <stride> indicates an amount to skip between values (analogous to the stride value used for \n",
+    "#string and list slicing):"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 53,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[1, 4, 7]"
+      ]
+     },
+     "execution_count": 53,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "list(range(1,10,3))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 54,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "(1, 2, 3, 4, 5, 6, 7, 8, 9)"
+      ]
+     },
+     "execution_count": 54,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "tuple(range(1,10))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 55,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "1\n",
+      "4\n",
+      "7\n"
+     ]
+    }
+   ],
+   "source": [
+    "x=range(1,10,3)\n",
+    "for i in x:\n",
+    "    print(i)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 58,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[-5, -4, -3, -2, -1, 0, 1, 2, 3, 4]"
+      ]
+     },
+     "execution_count": 58,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "list(range(-5,5))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 59,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[-5, -4, -3, -2, -1, 0, 1, 2, 3, 4]"
+      ]
+     },
+     "execution_count": 59,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "list(range(-5,5,1)) # same"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 60,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[]"
+      ]
+     },
+     "execution_count": 60,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "list(range(-5,5,-1))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 61,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[]"
+      ]
+     },
+     "execution_count": 61,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "list(range(5,-5))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 65,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[5, 4, 3, 2, 1, 0, -1, -2, -3, -4]"
+      ]
+     },
+     "execution_count": 65,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "list(range(5,-5,-1))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Altering for Loop Behavior -break, continue, else"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### break"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "foo\n",
+      "i is  foo\n",
+      "bar\n",
+      "b in bar\n"
+     ]
+    }
+   ],
+   "source": [
+    "#break terminates the loop completely \n",
+    "for i in ['foo', 'bar', 'baz', 'qux']:\n",
+    "    print(i)\n",
+    "    if 'b' in i:\n",
+    "        print('b in' ,i)\n",
+    "        break\n",
+    "    print('i is ',i)\n",
+    "            \n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 69,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "foo\n"
+     ]
+    }
+   ],
+   "source": [
+    "for i in ['foo', 'bar', 'baz', 'qux']:\n",
+    "    if i in 'bar':\n",
+    "        break\n",
+    "    print(i)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### continue"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 71,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#continue terminates the current iteration and proceeds to the next iteration:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 72,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "foo\n",
+      "qux\n"
+     ]
+    }
+   ],
+   "source": [
+    "for i in ['foo', 'bar', 'baz', 'qux']:\n",
+    "    if 'b' in i:\n",
+    "        continue\n",
+    "    print(i)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 73,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "foo\n",
+      "baz\n",
+      "qux\n"
+     ]
+    }
+   ],
+   "source": [
+    "for i in ['foo', 'bar', 'baz', 'qux']:\n",
+    "    if i in 'bar':\n",
+    "        continue\n",
+    "    print(i)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 74,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "foo\n",
+      "bar\n",
+      "baz\n",
+      "qux\n"
+     ]
+    }
+   ],
+   "source": [
+    "for i in ['foo', 'bar', 'baz', 'qux']:\n",
+    "    if i in 'b':\n",
+    "        continue\n",
+    "    print(i)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Else"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 77,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "it is not bar , foo\n",
+      "bar\n",
+      "it is not bar , baz\n",
+      "it is not bar , qux\n"
+     ]
+    }
+   ],
+   "source": [
+    "for i in ['foo', 'bar', 'baz', 'qux']:\n",
+    "    if i in 'bar':\n",
+    "        print(i)\n",
+    "    else:\n",
+    "        print('it is not bar ,',i)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 78,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#The else clause won’t be executed if the list is broken out of with a break statement:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 84,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "aa\n",
+      "bar\n",
+      "aa\n",
+      "aa\n"
+     ]
+    }
+   ],
+   "source": [
+    "for i in ['foo', 'bar', 'baz', 'qux']:\n",
+    "    if i == 'bar':       \n",
+    "        print(i)\n",
+    "    else:\n",
+    "        print('aa')\n",
+    "   "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 104,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "a = [10, 7, 5, 8, 11, 9]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 89,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import pandas as pd"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 106,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import numpy as np"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 111,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "    dif     i     j\n",
+      "16  6.0   5.0  11.0\n",
+      "26  6.0  11.0   5.0\n",
+      "2   5.0  10.0   5.0\n",
+      "12  5.0   5.0  10.0\n",
+      "25  4.0  11.0   7.0\n",
+      "32  4.0   9.0   5.0\n",
+      "10  4.0   7.0  11.0\n",
+      "17  4.0   5.0   9.0\n",
+      "15  3.0   5.0   8.0\n",
+      "27  3.0  11.0   8.0\n",
+      "6   3.0   7.0  10.0\n",
+      "22  3.0   8.0  11.0\n",
+      "20  3.0   8.0   5.0\n",
+      "1   3.0  10.0   7.0\n",
+      "31  2.0   9.0   7.0\n",
+      "18  2.0   8.0  10.0\n",
+      "13  2.0   5.0   7.0\n",
+      "11  2.0   7.0   9.0\n",
+      "8   2.0   7.0   5.0\n",
+      "34  2.0   9.0  11.0\n",
+      "3   2.0  10.0   8.0\n",
+      "29  2.0  11.0   9.0\n",
+      "30  1.0   9.0  10.0\n",
+      "33  1.0   9.0   8.0\n",
+      "19  1.0   8.0   7.0\n",
+      "9   1.0   7.0   8.0\n",
+      "23  1.0   8.0   9.0\n",
+      "24  1.0  11.0  10.0\n",
+      "5   1.0  10.0   9.0\n",
+      "4   1.0  10.0  11.0\n",
+      "0   0.0  10.0  10.0\n",
+      "28  0.0  11.0  11.0\n",
+      "21  0.0   8.0   8.0\n",
+      "14  0.0   5.0   5.0\n",
+      "7   0.0   7.0   7.0\n",
+      "35  0.0   9.0   9.0\n"
+     ]
+    }
+   ],
+   "source": [
+    "diff=pd.DataFrame()\n",
+    "for i in a:\n",
+    "    for j in a:\n",
+    "#         print('i' , i, ',j',j)\n",
+    "        dif=abs(i-j)\n",
+    "        diff=diff.append({'dif':dif,'i':i,'j':j},ignore_index=True)\n",
+    "#         diff=pd.concat(abs(i-j),i,j)\n",
+    "b=diff.sort_values('dif',ascending=False)\n",
+    "print(b)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Python lambda (Anonymous Functions) | filter, map, reduce"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 21,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# --Without using Lambda : while using def, we needed to define a function with a name cube and needed to pass a value to it. \n",
+    "# After execution, we also needed to return the result from where the function was called using the return keyword.\n",
+    "\n",
+    "# --Using Lambda : Lambda definition does not include a “return” statement, it always contains an expression which\n",
+    "# is returned. We can also put a lambda definition anywhere a function is expected, and we don’t have to assign it to\n",
+    "# a variable at all. This is the simplicity of lambda functions.\n",
+    "\n",
+    "# Lambda functions can be used along with built-in functions like filter(), map() and reduce().\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "100"
+      ]
+     },
+     "execution_count": 2,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "a=lambda x:x*x\n",
+    "a(10)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 35,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "100"
+      ]
+     },
+     "execution_count": 35,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# or\n",
+    "(lambda x: x*x)(10)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "12"
+      ]
+     },
+     "execution_count": 4,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "a=lambda x,y,z : x+y+z\n",
+    "a(5,4,3)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def myfunc(n):\n",
+    "  return lambda a : a ^ n\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "8\n",
+      "8\n"
+     ]
+    }
+   ],
+   "source": [
+    "mydoubler = myfunc(2)\n",
+    "print(mydoubler(10))\n",
+    "\n",
+    "#or\n",
+    "print(myfunc(2)(10))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def my(n):\n",
+    "    return lambda a:a**n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 18,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "25"
+      ]
+     },
+     "execution_count": 18,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "my(2)(5)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 19,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "125"
+      ]
+     },
+     "execution_count": 19,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "my(3)(5)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Use of lambda() with filter()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# it is only for filtering a list based on any condition"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 22,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# The filter() function in Python takes in a function and a list as arguments. \n",
+    "# This offers an elegant way to filter out all the elements of a sequence “sequence”, for which the function returns True.\n",
+    "# Here is a small program that returns the odd numbers from an input list:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[5, 7, 97, 77, 23, 73, 61]"
+      ]
+     },
+     "execution_count": 11,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "li = [5, 7, 22, 97, 54, 62, 77, 23, 73, 61] \n",
+    "odd=list(filter(lambda x : (x%2!=0),li))\n",
+    "odd"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[5, 7, 97, 77, 23, 73, 61]\n"
+     ]
+    }
+   ],
+   "source": [
+    "bb=[x for x in li if x%2!=0]\n",
+    "print(bb)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 27,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[5, 7, 22, 97, 54, 62, 77, 23, 73, 61]"
+      ]
+     },
+     "execution_count": 27,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "li = [5, 7, 22, 97, 54, 62, 77, 23, 73, 61] \n",
+    "double=list(filter(lambda x : (x*2),li))\n",
+    "double ## did not work for modifiying the list\n",
+    "        # for this we have map"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### lambda() with map()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 28,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# The map() function in Python takes in a function and a list as argument. The function is called with a \n",
+    "# lambda function and a list and a new list is returned which contains all the lambda modified items returned by \n",
+    "# that function for each item. Example:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[10, 14, 44, 194, 108, 124, 154, 46, 146, 122]"
+      ]
+     },
+     "execution_count": 9,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "li = [5, 7, 22, 97, 54, 62, 77, 23, 73, 61] \n",
+    "double=list(map(lambda a : (a*2),li))\n",
+    "double"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[10, 14, 44, 194, 108, 124, 154, 46, 146, 122]\n"
+     ]
+    }
+   ],
+   "source": [
+    "aa=[i*2 for i in li]\n",
+    "print(aa)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "###  lambda() with reduce()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# The reduce() function in Python takes in a function and a list as argument. \n",
+    "# The function is called with a lambda function and a list and a new reduced result is returned.\n",
+    "# This performs a repetitive operation over the pairs of the list. This is a part of functools module. Example:\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from functools import reduce"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "45"
+      ]
+     },
+     "execution_count": 15,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "li=[1,2,3,4,5,6,7,8,9]\n",
+    "summ= reduce(lambda x,y: x+y , li)\n",
+    "summ #Here the results of previous two elements are added to the next element and this goes on\n",
+    "        #till the end of the list like (((((5+8)+10)+20)+50)+100)."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#### filter -it is only for filtering a list based on any condition\n",
+    "#### map    - work for modifiying the list\n",
+    "#### reduce - To reduce the list, or performs a repetitive operation over the pairs of the list"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### difference between a lambda and regular function"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Lambda functions can only have one expression in their body. \n",
+    "\n",
+    "# Regular functions can have multiple expressions and statements in their body. \n",
+    "\n",
+    "# Lambdas do not have a name associated with them. That's why they are also known as anonymous functions. \n",
+    "\n",
+    "# Regular functions must have a name and signature. \n",
+    "\n",
+    "# Lambdas do not contain a return statement because the body is automatically returned. \n",
+    "\n",
+    "# Functions which need to return value should include a return statement. \n"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.6.5"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
