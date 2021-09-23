@@ -1,0 +1,542 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def add(*args):\n",
+    "    return sum(args)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "add()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "add(17)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "add(1, 2, 3, 4, 5)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "class A:\n",
+    "    def add(self, *args):\n",
+    "        return sum(args)\n",
+    "x = A()\n",
+    "x.add(2315,23,5,235,234,5,34)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### 21. WAP to make a simple labelEncoder\n",
+    "```\n",
+    ">>> labelEncoder(['Yes', 'No', 'No', 'Yes', 'Yes'])\n",
+    "[True, False, False, True, True]\n",
+    "```"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def labelEncoder(l):\n",
+    "    a = []\n",
+    "    for i in l:\n",
+    "        if i==\"Yes\":\n",
+    "            a.append(True)\n",
+    "        elif i==\"No\":\n",
+    "            a.append(False)\n",
+    "    return a\n",
+    "output = labelEncoder(['Yes', 'No', \"\", 'No', 'Yes', 'Yes'])\n",
+    "print(output)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def ipValidator(ip):\n",
+    "    # ip = input(\"Enter ip address: \")\n",
+    "    ipv4 = ip.split(\".\")\n",
+    "    if len(ipv4)!=4:\n",
+    "        return \"Invalid for not having four octets\"\n",
+    "    for i in ipv4:\n",
+    "        if int(i) not in range(256):\n",
+    "            return \"Invalid for not being in range(256)\"\n",
+    "    return \"Valid\""
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "ipValidator(\"198.67.8.1\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "ipValidator(\"198.67.8.1.1\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "ipValidator(\"234.56.890.1\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Scope of variable"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "https://goo.gl/R7MYgj"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### List comprehension"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "List comprehension is a one liner shortcut to **create a new list**,\n",
+    "starting from other iterables by vitue of mapping and/or filtering.\n",
+    "\n",
+    "```\n",
+    "[exp for loop]\n",
+    "[exp for loop if cond]\n",
+    "```"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "l = [123,4,12335,135234,5,2345,32,53]\n",
+    "a = []\n",
+    "for i in l:\n",
+    "    if i%2!=0:\n",
+    "        a.append(i)\n",
+    "print(a)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "[i for i in l if i%2!=0]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "[i**2 for i in l]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "[i**2 for i in l if i%2!=0]"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### 21. WAP to filter and sort vowels from a string.\n",
+    "```\n",
+    ">>> filterVowel(\"India\")\n",
+    "['I', 'i', 'a']\n",
+    "```"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def filterVowel(s):\n",
+    "    return sorted([i for i in s if i.lower() in \"aeiou\"])\n",
+    "    \n",
+    "filterVowel(\"India\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### 22. WAP to find common data in two list and sort them as well"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def commonValues(x, y):\n",
+    "    return sorted([i for i in x if i in y])\n",
+    "    # return sorted([i for i in x for j in y if i==j])\n",
+    "    \n",
+    "commonValues([1, 2, 4, 3], [5, 3, 4])\n",
+    "# [3, 4]"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### 23. Convert boolean values to binary"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "l = [True, False, True, True, False]\n",
+    "[1 if i==True else 0 for i in l]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# [True if cond else False for loop]"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "https://www.linkedin.com/pulse/6-different-ways-using-list-comprehensions-python-ram-kumar/"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Dictionary\n",
+    "\n",
+    "- It is an unordered and mutable key:value pair collection.\n",
+    "- key in a dictionary is unique and immutable."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#     0    1    2\n",
+    "l = ['a', 'b', 'c']"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "l = {0:'a', 1:'b', 2:'c'}\n",
+    "type(l)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "d = {10:'a', 21:'b', 12:'c'}\n",
+    "type(d)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "d = {10:'a', 21:'b', \"cat\":'c'}\n",
+    "type(d)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "{'a':'apple', 'b':'batman'} == {'b':'batman', \"a\":'apple'}"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "d"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "d['cat']"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "d.get('cat')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "d.get('rat', \"invalid key\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Information mapping"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "d = {'BLR':['Bangalore', 'Bengaluru'], \n",
+    "     'DEL':'Delhi', 'BOM':'Mumbai'}\n",
+    "key = input(\"Enter key \")\n",
+    "d.get(key, \"Invalid key\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Dict comprehension\n",
+    "{kexp:vexp for loop if cond}"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### 24. WAP to represent the vowels and their count in given word."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "word = \"india\"\n",
+    "{i:word.count(i) for i in word if i.lower() in \"aeiou\"}"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "word = input(\"Enter a word \")\n",
+    "d = {}\n",
+    "for i in word:\n",
+    "    if i.lower() in \"aeiou\":\n",
+    "        d[i] = word.count(i)\n",
+    "print(d)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Incrementing different values in python\n",
+    "```\n",
+    "count += 1\n",
+    "s += i\n",
+    "l.append(i)\n",
+    "t += i,\n",
+    "d[key] = value\n",
+    "```"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "t = 1, # single value tuple\n",
+    "type(t)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "t  = (1, 2, 3)\n",
+    "t += 4,\n",
+    "print(t)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "d"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "d['b'] = \"\""
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "d"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "d['b'] = \"batman\""
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "d"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "### The end for day 2"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.6.5"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
