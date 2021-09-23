@@ -1,0 +1,808 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Modules"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "- **Namespace** is a list of names inside any code structure like functions, classes, modules etc.\n",
+    "\n",
+    "#### import module\n",
+    "\n",
+    "```\n",
+    "dir(module)\n",
+    "help(module.function)\n",
+    "\n",
+    "\n",
+    "from module import class_name\n",
+    "obj = class_name()\n",
+    "obj.function()\n",
+    "\n",
+    "\n",
+    "from module import function_name\n",
+    "function_name()\n",
+    "\n",
+    "import module\n",
+    "module.function_name()\n",
+    "```\n",
+    "\n",
+    "#### Define PYTHONPATH variable_name  and variable_value to mark a directory as python library."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### File handing"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Windown path fix\n",
+    "\n",
+    "```\n",
+    "'C:\\Users\\rkp\\newfolder\\test.txt' # wrong\n",
+    "\n",
+    "'C:\\\\Users\\\\rkp\\\\newfolder\\\\test.txt' # \\\\\n",
+    "'C:/Users/rkp/newfolder/test.txt' # /\n",
+    "r'C:\\Users\\rkp\\newfolder\\test.txt' # raw string\n",
+    "```"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Step 1: Make file object \n",
+    "```\n",
+    "f = open('path/filename.extension', mode='r')\n",
+    "```\n",
+    "here, _f_ is file object or TextIOWrapper object\n",
+    "\n",
+    "\n",
+    "#### Mode of file\n",
+    "\n",
+    "- Text mode : 'r' (default) , 'w', 'a'\n",
+    "- Binary mode : 'rb', 'wb', 'ab'\n",
+    "\n",
+    "- Mode selection sets the cursor location as well. \n",
+    "- 'r' mode sets cursor in the beginning of file.\n",
+    "- 'w' mode truncates everthing\n",
+    "- 'a' mode sets cursor in the end\n",
+    "- 'w' and 'a' mode creates the source file if not found\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Step 2: Read/Write Operation"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "- readable() : ckecks if file in opened in read mode\n",
+    "- read() : reads entire file data as one string object\n",
+    "- readline() : reads one line from cursor location\n",
+    "- readlines() : reads all the line as list object\n",
+    "    \n",
+    "- writable() : ckecks if file in opened in 'w' or 'a' mode\n",
+    "- write(str)  : one or mode lines in the file\n",
+    "- writelines(list) : write list of string lines in the file."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "l = [1, 2, 3, 4, 5]\n",
+    "\"\".join([str(i) for i in l])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Step 3: Close the file"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "- close() : close the file object\n",
+    "- closed = False\n",
+    "- with is a keyword that in case of file automatically closes the file"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "f = open(r'source.txt', 'w') # file gets created if not found\n",
+    "type(f)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "f = open(r'source.txt') # read  is the default mode"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "print(f.read())"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "f.readable()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "f.writable()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "f.closed"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "f.close()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "f.closed"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "with open('source.txt', 'w') as f:\n",
+    "    data = input(\"Enter data in file \")\n",
+    "    f.write(data)\n",
+    "print(\"Is the file closed \", f.closed)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "with open('source.txt') as f:\n",
+    "    print(f.read())"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "with open('source.txt') as f:\n",
+    "    print(f.read())"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "with open('source.txt') as f:\n",
+    "    print(f.readline())"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "with open('source.txt') as f:\n",
+    "    print(f.read(3)) # reads 3 characteres/bytes"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "with open('source.txt') as f:\n",
+    "    for line in f.readlines():\n",
+    "        print(line)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "f = open('source.txt', 'r')\n",
+    "content = f.read()\n",
+    "print(content)\n",
+    "f.close()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### 25. WAP to print a specific line number given by the user "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "with open('source.txt') as f:\n",
+    "    lines = f.readlines()\n",
+    "lineno = int(input(\"Enter the line number\"))\n",
+    "if lineno <= len(lines):\n",
+    "    print(lines[lineno-1])\n",
+    "else:\n",
+    "    print(\"Invalid line number\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def readSelectLine(filename, lineno):\n",
+    "    with open(filename) as f:\n",
+    "        lines = f.readlines()\n",
+    "    if lineno <= len(lines):\n",
+    "        return lines[lineno-1]\n",
+    "    return \"Invalid line number\""
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "print(readSelectLine('source.txt', 3))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "print(readSelectLine('source.txt', 30))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "with open('source.txt') as f:\n",
+    "    print(f.name)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import os\n",
+    "os.getcwd()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "print(f.mode)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### CSV file handling"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import csv\n",
+    "with open(r'/home/devu/Desktop/source.csv') as f:\n",
+    "    for row in csv.reader(f):\n",
+    "        print(row)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import csv\n",
+    "with open(r'/home/devu/Desktop/source.csv') as f:\n",
+    "    for row in csv.reader(f):\n",
+    "        print(row[2]) # 2 is column number"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "f = open(r'/home/devu/Desktop/source.csv')\n",
+    "[row[2] for row in csv.reader(f)]"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### XML parsing using etree"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "##### source.xml\n",
+    "```\n",
+    "<collection about=\"Contact Information\">\n",
+    "\t<element attr=\"value\">\n",
+    "\t\t<name>John</name>\n",
+    "\t\t<phone>9988776655</phone>\n",
+    "\t\t<email>john@gmail.com</email>\n",
+    "\t</element>\n",
+    "\t<element>\n",
+    "\t\t<name>Doe</name>\n",
+    "\t\t<phone>9999988888</phone>\n",
+    "\t\t<email>doe@gmail.com</email>\n",
+    "\t</element>\n",
+    "</collection>\n",
+    "```\n",
+    "```                          \n",
+    "                          0                              1\n",
+    "collection = [['John', '9988776655', 'john@gmail.com], element]\n",
+    "```"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import xml.etree.ElementTree as ET\n",
+    "f = ET.parse('source.xml')\n",
+    "root = f.getroot()\n",
+    "\n",
+    "print(root.tag)\n",
+    "print(root.attrib.get('about'))\n",
+    "\n",
+    "print(root[0][0].tag)\n",
+    "print(root[0][0].text)\n",
+    "print(root[0][0].attrib)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "for i in root.iter():\n",
+    "    # print(i.tag)\n",
+    "    print(i.text)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "for i in root.iter('name'):\n",
+    "    print(i.text)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### JSON Parsing\n",
+    "\n",
+    "- JavaScript Object Notation\n",
+    "\n",
+    "```\n",
+    "Python                      JSON\n",
+    "---------------------------------------------\n",
+    "\"\" / ''                     \"\"\n",
+    "True                        true\n",
+    "False                       false\n",
+    "None                        null\n",
+    "[] / ()                     []\n",
+    "int/str/tuple key           str keys\n",
+    "```"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import json\n",
+    "d = {1: ['Apple', (\"Avengers\", \"Ant\")], 'a': True, 3: None}\n",
+    "with open('source.json', 'w') as f:\n",
+    "    json.dump(d, f, indent=4)\n",
+    "print(\"Done\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import json\n",
+    "with open('source.json') as f:\n",
+    "    content = json.load(f)\n",
+    "print(type(content))\n",
+    "print(content)\n",
+    "\n",
+    "# output = {}\n",
+    "# output.update(content)\n",
+    "# print(output)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### lambda functions"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "- **lambda** is keyword like **def** to define a function.\n",
+    "- It can create one liner anonymus function object.\n",
+    "```\n",
+    "lambda args: expression\n",
+    "```"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# def add(a, b): return a+b"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "add = lambda a,b: a+b"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "add(223542435, 2354534523)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "even = lambda x: x%2==0"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "type(even)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "even(23)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "even(22)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### map(function, iterable)\n",
+    "\n",
+    "- Higher order function\n",
+    "- First class object"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "l = [123,523,5,3,5234,5234,5]\n",
+    "def add_one(x):\n",
+    "    return x+1\n",
+    "list(map(add_one, l))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "list(map(lambda x:x+1, [123,523,5,3,5234,5234,5]))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### filter(function, iterable)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "l = [123,523,5,3,5234,5234,5]\n",
+    "def add_one(x):\n",
+    "    return x>100\n",
+    "list(filter(add_one, l))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "list(filter(lambda x:x>100, [123,523,5,3,5234,5234,5]))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### reduce(function, iterable)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from functools import reduce\n",
+    "reduce(lambda x, y: x+y, [123,4,1234,123,4,1234,1234,1])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "sum([123,4,1234,123,4,1234,1234,1])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "reduce(lambda x, y: x*y, [123,4,1234,123,4,1234,1234,1])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Email sending "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from smtplib import SMTP\n",
+    "from getpass import getpass\n",
+    "import csv\n",
+    "\n",
+    "sender = \"rkp0432@gmail.com\"\n",
+    "password = getpass()\n",
+    "receivers = [row[2] for row in csv.reader(open('source.csv'))]\n",
+    "message = \"\"\"\\\n",
+    "Subject: test email ignore\n",
+    "\n",
+    "Dear %s\n",
+    "blah blah\n",
+    "\"\"\"\n",
+    "\n",
+    "obj = SMTP('smtp.gmail.com:587')\n",
+    "obj.starttls()\n",
+    "obj.login(sender, password)\n",
+    "obj.sendmail(sender, receiver, message)\n",
+    "obj.quit()\n",
+    "print(\"Email sent\")\n",
+    "\n",
+    "# https://myaccount.google.com/intro/security"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### CSV to csv copy"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import csv\n",
+    "with open('source.csv') as f:\n",
+    "    content = list(csv.reader(f))\n",
+    "\n",
+    "filename = input(\"Enter csv file name \") + \".csv\"\n",
+    "with open(filename, 'w') as f:\n",
+    "    cwo = csv.writer(f)\n",
+    "    cwo.writerows(content) # 2 dimensional list\n",
+    "    # cwo.writerow(row_data)\n",
+    "print(\"Copy complete\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from getpass import getpass\n",
+    "var = getpass(\"Enter password \")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "print(var)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.6.5"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
