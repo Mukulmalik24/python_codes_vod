@@ -1,0 +1,622 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Training Agenda\n",
+    "```\n",
+    "1. Classes and Objects\n",
+    "2. Exception handling\n",
+    "3. Unit testing \n",
+    "4. Introduction to Django framework \n",
+    "```"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Classes and objects\n",
+    "### Terminologies\n",
+    "\n",
+    "- **class** : It is a code structure smalle than module but with similar features, thus it is also called **mini-module**.\n",
+    "- class is defined with a keyword **class**.\n",
+    "- class ideally group similar functions together.\n",
+    "- class are code templates which needs to be instantiated/called by object.\n",
+    "- **objects** are instance of class.\n",
+    "- **static/class variable** which is not reinstantiated/reset for different object.\n",
+    "- **instance variables** are the one which can change with different instances/objects.\n",
+    "- ```__init__()```: initial function of every class that initializes common variables definition for method in class.\n",
+    "-  **self** is the representation for current object of the class.\n",
+    "- data members\n",
+    "- methods/ member function\n",
+    "- attribute"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "class Greeting:\n",
+    "    print(\"hello\")\n",
+    "X = Greeting()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "class A:\n",
+    "    x = \"hello\" # static/class variable\n",
+    "    def __init__(self, y):\n",
+    "        self.y = y # instance variable"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "obj1 = A(100)\n",
+    "print(\"x\", obj1.x)\n",
+    "print(\"y\", obj1.y)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "obj2 = A(120)\n",
+    "print(\"x\", obj2.x)\n",
+    "print(\"y\", obj2.y)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "class Resto:\n",
+    "    # orders = [] # static\n",
+    "    def __init__(self):\n",
+    "        self.orders = [] # instance\n",
+    "    def order_item(self, item):\n",
+    "        return self.orders.append(item)\n",
+    "        "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "c1 = Resto()\n",
+    "c1.order_item(\"Pizza\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "c2 = Resto()\n",
+    "c2.order_item(\"Pasta\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "c1.orders"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "c2.orders"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "class A:\n",
+    "    def __init__(self, x, y, z):\n",
+    "        self.x = x\n",
+    "        self.y = y\n",
+    "        self.y = z\n",
+    "    def greeting(self, msg):\n",
+    "        print(msg)\n",
+    "obj = A()\n",
+    "# A.__init__(obj)\n",
+    "obj.greeting(\"Hola\")\n",
+    "# A.greeting(obj, \"Hola\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "class A:\n",
+    "    def __init__(self, x, y):\n",
+    "        self.x = x\n",
+    "        self.y = y\n",
+    "    def add(self, z):\n",
+    "        return self.x + self.y + z\n",
+    "    def sub(self):\n",
+    "        return self.x - 10"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "obj = A(100, 200)\n",
+    "obj.add(500)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Inheritance: sharing of attribute"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "class A: # Parent/base/super class \n",
+    "    def f1(self):\n",
+    "        return \"A-f1\""
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "obj = A()\n",
+    "obj.f1()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "class B(A): # Simple inheritance; B is child/sub class\n",
+    "    pass"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "objB = B()\n",
+    "objB.f1()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "256**(26+26+10+1)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "class A: \n",
+    "    def f1(self):\n",
+    "        return \"A-f1\"\n",
+    "    def f2(self):\n",
+    "        return \"A-f2\"\n",
+    "class B(A):\n",
+    "    def f2(self): # refinition/selction --> overiding\n",
+    "        return \"B-f2\"\n",
+    "\n",
+    "obj = B()\n",
+    "obj.f1()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "obj.f2()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "objA = A()\n",
+    "objA.f2()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Multiple inheritance"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "class A:\n",
+    "    def f1(self):\n",
+    "        return \"A-f1\"\n",
+    "class B:\n",
+    "    def f2(self):\n",
+    "        return \"B-f2\"\n",
+    "class C(A, B): # mutiple inheritance\n",
+    "    pass\n",
+    "    "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "obj = C()\n",
+    "obj.f1()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "obj.f2()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "class A:\n",
+    "    def f1(self):\n",
+    "        return \"A-f1\"\n",
+    "class B:\n",
+    "    def f2(self):\n",
+    "        return \"B-f2\"\n",
+    "class C(A, B): # mutiple inheritance\n",
+    "    def f2(self):\n",
+    "        return \"C-f2\""
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "objC = C()\n",
+    "objC.f2()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Overriding rules\n",
+    "- **Rule 1**: Child class redefinition of an attribute is selected over the Parent class original defition of the same attribute.\n",
+    "- **Rule 2**: In case of multiple inheritance the attribute priority is Left--> Right or in the reverse order of assignment.\n",
+    "- **Rule 3**: In case of mutilevel inheritance, the priority is given to attribute of closely/directly connect Parent. "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "class A:\n",
+    "    def f2(self):\n",
+    "        return \"A-f2\"\n",
+    "class B:\n",
+    "    def f2(self):\n",
+    "        return \"B-f2\"\n",
+    "class C(B, A): # L-R\n",
+    "    pass\n",
+    "objC = C()\n",
+    "objC.f2()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Mutilevel inheritance"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "class A:\n",
+    "    def f1(self):\n",
+    "        return \"A-f1\"\n",
+    "class B(A):\n",
+    "    def f1(self):\n",
+    "        return \"B-f1\"\n",
+    "class C(B):\n",
+    "    pass\n",
+    "\n",
+    "obj = C()\n",
+    "obj.f1()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "**Decorators** are functions/classes that may influence the output of another function indirectly, temprarily and non-universally.\n",
+    "- _@_ symbol is used to apply decorator."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def NEWUSER100(fxn):\n",
+    "    def wrapper(a):\n",
+    "        return fxn(a)-100\n",
+    "    return wrapper\n",
+    " \n",
+    "@NEWUSER100\n",
+    "def bill(amount):\n",
+    "    return amount\n",
+    "bill(1000)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "- **Generators** are functions with **yield** keyword rather than _return_ to generate an iterable sequence. "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def gen(num):\n",
+    "    i = 0\n",
+    "    while i<num:\n",
+    "        yield i # print(i, end=\" \")\n",
+    "        i += 1\n",
+    "x = gen(5) \n",
+    "type(x)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "next(x)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "next(x)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Exception handling\n",
+    "\n",
+    "Handling exceptions is about covering the Traceback message details and reviving the program control"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### What are exceptions?\n",
+    "\n",
+    "Exceptions are simply unplanned events.\n",
+    "\n",
+    "#### How is it caused?\n",
+    "\n",
+    "Exceptions can result from actions of enduser or developer. Environment level exceptions may also occur.\n",
+    "\n",
+    "#### How to handle it using try, except, else and finally\n",
+    "```\n",
+    "try:\n",
+    "    suspected_code\n",
+    "except:\n",
+    "    handler\n",
+    "else:\n",
+    "    code_to_execute_when_try_never_failed\n",
+    "finally:\n",
+    "    code to always execute\n",
+    "```"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import time\n",
+    "try:\n",
+    "    a = 12\n",
+    "    b = int(input(\"Enter a number \"))\n",
+    "    print(a/b)\n",
+    "# except ValueError:\n",
+    "#     print(\"value error\")\n",
+    "# except ZeroDivisionError:\n",
+    "#     print(\"zde\")\n",
+    "except Exception as e:\n",
+    "    print(\"%s error occuured on %s\" % (e, time.ctime()))\n",
+    "finally:\n",
+    "    print(\"finally block\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Create and raise exception"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "class AgeError(Exception): pass\n",
+    "raise AgeError(\"My error message\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "class AgeError(Exception): pass\n",
+    "try:\n",
+    "    age = int(input(\"Enter age \"))\n",
+    "    if age<18:\n",
+    "        raise AgeError(\"You are underage\")\n",
+    "except:\n",
+    "    pass\n",
+    "else:\n",
+    "    print(\"Welcome to PUB-G Mobile\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "try:\n",
+    "    age = int(input(\"Enter age \"))\n",
+    "    assert age>=18\n",
+    "except:\n",
+    "    print(\"You are underage\")\n",
+    "else:\n",
+    "    print(\"Welcome to PUB-G\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Program control with exception keywords\n",
+    "```\n",
+    "try -correct-> else --> finally\n",
+    "try -wrong--> except --> finally\n",
+    "```"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Introduction to Django Framework"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "- Django is a web application framework.\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.6.5"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
